@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+            <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+            <title>FoodBET</title>
+        </f:facet>
+    </h:head>
+    <h:body>
+        <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/images/styles.css" type="text/css" media="all"/>
+        <h:panelGrid columns="1" style="margin-left: auto; margin-right: auto; width: 900px;" cellpadding="1" cellspacing="1" >
+            <h:form>
+                <ui:include src="../t/ca.xhtml" />
+            </h:form>
+            <h:panelGrid columns="1" cellpadding="1" cellspacing="1" style="width: 900px;">
+                
+                   <h:panelGrid columns="1" cellpadding="1" cellspacing="1" style="width: 680px; text-align: center">
+                        <div class="content">
+                            <!-- aqui va el código que sea necesario para cada pantalla -->
+                            <ui:insert name="content">
+                                contenido
+                            </ui:insert>
+                        </div>
+                    </h:panelGrid>
+               
+                <h:panelGrid columns="1" cellpadding="1" cellspacing="1" style="margin:0 auto;">
+                    <ui:include src="../t/fo.xhtml" />
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:panelGrid>
+    </h:body>
+</html>

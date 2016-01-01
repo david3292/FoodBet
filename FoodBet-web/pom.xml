@@ -33,7 +33,7 @@
         </dependency>
         <dependency>
             <groupId>org.primefaces.themes</groupId>
-            <artifactId>cupertino</artifactId>
+            <artifactId>dot-luv</artifactId>
             <version>1.0.10</version>
         </dependency>
         <dependency>

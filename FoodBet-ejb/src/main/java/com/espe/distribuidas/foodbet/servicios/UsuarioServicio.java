@@ -44,7 +44,8 @@ public class UsuarioServicio {
     
     public boolean login(String usuario, String clave){
         boolean correcto = false;
-        Usuario user = this.usuarioDAO.findById(usuario, true);
+        
+        Usuario user = this.usuarioDAO.findById(usuario, false);
         if(user != null){
             String claveMd5 = DigestUtils.md5Hex(clave);
             if(user.getClave().equals(claveMd5))

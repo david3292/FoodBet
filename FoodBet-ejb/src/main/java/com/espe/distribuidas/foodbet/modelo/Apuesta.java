@@ -35,7 +35,7 @@ public class Apuesta implements Serializable{
     @ManyToOne
     private ParticipanteApuesta participante;
     
-    @JoinColumn(name = "ID_PARTICIPANTE", referencedColumnName = "ID_PARTICIPANTE2", insertable = false, updatable = false)
+    @JoinColumn(name = "ID_PARTICIPANTE2", referencedColumnName = "ID_PARTICIPANTE", insertable = false, updatable = false)
     @ManyToOne
     private ParticipanteApuesta participante2;
     

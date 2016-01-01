@@ -1,14 +1,26 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      template="/templates/plantilla1.xhtml">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        Hello from Facelets
-        <br />
-        <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />
+        <h:form>
+            <p:growl id="mensaje" autoUpdate="true" showSummary="true" showDetail="true"/>
+            <h:panelGrid id="login" columns="5">
+                <p:outputLabel for="usuario" value="Usuario" styleClass="textb"/>
+                <p:inputText id="usuario" value="#{loginBean.usuario}" required="true" requiredMessage="Ingrese usuario"/>
+
+                <p:outputLabel for="clave" value="Clave" styleClass="textb"/>
+                <p:password id="clave" value="#{loginBean.clave}" required="true" requiredMessage="Ingrese Clave"/>
+                <p:commandButton icon="ui-icon-key" value="Iniciar Sesion" update="login" action="#{loginBean.doLogin()}"/>
+            </h:panelGrid>
+        </h:form>
     </h:body>
 </html>
 
