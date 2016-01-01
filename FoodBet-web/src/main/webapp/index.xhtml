@@ -21,6 +21,35 @@
                 <p:commandButton icon="ui-icon-key" value="Iniciar Sesion" update="login" action="#{loginBean.doLogin()}"/>
             </h:panelGrid>
         </h:form>
+        
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true" />
+            <p:dataTable id="restaurantes" var="rest" value="#{restauranteBean.restaurantes}" selectionMode="single" selection="#{restauranteBean.restSelected}" rowKey="#{rest.codRestaurante}">
+                <f:facet name="header">
+                    Restaurantes
+                </f:facet>
+                <p:ajax event="rowSelect" listener="#{restauranteBean.onRowSelect}" update=":form:msgs" />
+                <p:ajax event="rowUnselect" listener="#{restauranteBean.onRowUnselect}" update=":form:msgs" />
+                <p:column headerText="Id">
+                    <h:outputText value="#{rest.codRestaurante}" />
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{rest.nombre}" />
+                </p:column>
+                <p:column headerText="Direccion">
+                    <h:outputText value="#{rest.direccion}" />
+                </p:column>
+                <p:column headerText="Telefono1">
+                    <h:outputText value="#{rest.telefono1}" />
+                </p:column>
+                <p:column headerText="Telefono2">
+                    <h:outputText value="#{rest.telefono2}" />
+                </p:column>
+                <p:column headerText="Especialidad">
+                    <h:outputText value="#{rest.especialidad}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
     </h:body>
 </html>
 
