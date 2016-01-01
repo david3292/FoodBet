@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="plantillas/template1.xhtml">
+        <ui:define name="content">
+            <h:form id="form">
+                <p:growl id="growl" showDetail="true" sticky="true" /> 
+                <p:messages id="msjError" showDetail="true" closable="true" autoUpdate="true"></p:messages>
+                <p:tabView id="tabAdm" dynamic="true" cache="false" orientation="left" style="width: 1140px">
+                    <p:tab title="Restaurants">
+                        <p:outputPanel id="botonesR">
+                            <p:commandButton value="Nuevo" oncomplete="dlgRestaurant.show();" update=":form" />
+                            <p:commandButton value="Actualizar" actionListener="#{restauranteBean.cargarDatosActualizar}"
+                                             update=":form"/>
+                        </p:outputPanel>
+
+                        <p:dataTable id="restaurantes" var="rest" value="#{restauranteBean.restaurantes}" selectionMode="single" selection="#{restauranteBean.restSelected}" rowKey="#{rest.codRestaurante}">
+                            <p:ajax event="rowSelect" listener="#{restauranteBean.onRowSelect}" update=":form:growl" />
+                            <p:ajax event="rowUnselect" listener="#{restauranteBean.onRowUnselect}" update=":form:growl" />
+                            <p:column headerText="Id">
+                                <h:outputText value="#{rest.codRestaurante}" />
+                            </p:column>
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{rest.nombre}" />
+                            </p:column>
+                            <p:column headerText="Direccion">
+                                <h:outputText value="#{rest.direccion}" />
+                            </p:column>
+                            <p:column headerText="Telefono1">
+                                <h:outputText value="#{rest.telefono1}" />
+                            </p:column>
+                            <p:column headerText="Telefono2">
+                                <h:outputText value="#{rest.telefono2}" />
+                            </p:column>
+                            <p:column headerText="Especialidad">
+                                <h:outputText value="#{rest.especialidad}" />
+                            </p:column>
+                        </p:dataTable>
+
+                    </p:tab>
+                    <p:tab title="Menú">
+
+                    </p:tab>
+                    <p:tab title="Equipo">
+
+                    </p:tab>
+                    <p:tab title="Evento Deportivo">
+
+                    </p:tab>
+                    <p:tab title="Usuario">
+
+                    </p:tab>
+                </p:tabView>
+                <p:dialog header="Nuevo Restaurant" widgetVar="dlgRestaurant" id="dlgRestaurant">
+                    <p:panelGrid columns="2" styleClass="noBorders">
+                        Codigo
+                        <h:inputText id="txtCodigoR" value="#{beanRestaurant.codigo}" />
+                        Nombre
+                        <h:inputText id="txtNombreR" value="#{beanRestaurant.nombre}" />
+                        Direccion
+                        <h:inputText id="txtDescripcionR" value="#{beanRestaurant.direccion}" />
+                        Telefono
+                        <h:inputText id="txtTelefonoR" value="#{beanRestaurant.telefono}" />
+                        Especialidad
+                        <h:inputText id="txtEspecialidadR" value="#{beanRestaurant.especialidad}" />
+                    </p:panelGrid>
+                    <p:commandButton id="btnRegistrarRestaurant" value="Registrar"
+                                     actionListener="#{beanRestaurant}"
+                                     update=":form" onclick="dlgPerfil.hide()">
+                    </p:commandButton>
+                </p:dialog>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

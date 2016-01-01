@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"> 
+    <ui:composition template="plantillas/template1.xhtml">
+        <ui:define name="content">    
+            <h:form> 
+                <p:growl id="mensajesLogin"
+                         sticky="true"
+                         showDetail="true"/>
+                <p:messages id="msjError" showDetail="true" closable="true" autoUpdate="true"></p:messages>
+                <p:panelGrid columns="2" style="margin: auto;" styleClass="noBorders">
+                    <p:panelGrid columns="1"
+                                 id="ValidarIngreso"
+                                 style="margin-left:100px; text-align: center;" 
+                                 styleClass="noBorders">
+                        <p:panel id="pnlLogin"
+                                 header="Acceso">                 
+                            <h:panelGrid id="pgLogin" columns="2" cellspacing="1" cellpadding="1"
+                                         style="text-align: right; margin-left: auto; margin-right: auto; padding-top: 10px;">  
+                                <p:outputLabel for="itUsuarioLogin"
+                                               value="Usuario:" />  
+                                <p:inputText id="itUsuarioLogin"
+                                             value="#{loginBean.usuario}" required="true" requiredMessage="Ingrese usuario"/>
+                                <p:outputLabel for="itContraseniaLogin" 
+                                               value="Contraseña:" />  
+                                <p:password id="itContraseniaLogin"
+                                            value="#{loginBean.clave}" required="true" requiredMessage="Ingrese Clave"/>  
+                            </h:panelGrid>
+                            <h:panelGrid id="pgBotonesLoginNormal" columns="2" cellspacing="2" cellpadding="2"
+                                         style="margin-left: auto; margin-right: auto;">
+                                <p:commandButton id="btnLogin" value="Ingresar" 
+                                                 style="height: 40px; font-size: 13px;"
+                                                 update="pgLogin" action="#{loginBean.doLogin()}"/>
+                                <p:commandButton id="btnRegistrar" value="Registrarse" 
+                                                 style="height: 40px; font-size: 13px;"/> 
+                            </h:panelGrid>
+
+                            <p:separator style="width: 300px;"/>
+
+                            <h:panelGrid columns="2" cellspacing="2" cellpadding="2"
+                                         style="margin-left: auto; margin-right: auto;">
+                                <p:commandLink id="lnkRestablecerPass"  ajax="false" value="Ha olvidado la contraseña"/>
+                            </h:panelGrid>
+                        </p:panel>   
+                    </p:panelGrid>
+                    <h:panelGrid columns="1" 
+                                 style="margin-left:150px;"
+                                 styleClass="noBorders">
+                        <p:graphicImage value="/images/FoodBet.gif"  width="500" height="325"/>
+                    </h:panelGrid>  
+                </p:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
