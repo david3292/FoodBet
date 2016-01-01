@@ -26,17 +26,20 @@ public class LoginBean implements Serializable{
     @EJB
     private UsuarioServicio userService;
     
-    public void doLogin(){
+    public String doLogin(){
+        String bandera="login";
         try{
             if(this.userService.login(usuario, clave)){
                 System.out.println("ingresa");
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Bienvenido"));
+                bandera="admin";
             }else{
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "Usuario Incorrecto"));
             }
         }catch(Exception e){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "Usuario Incorrecto e"));
         }
+        return bandera;
     }
 
     public String getUsuario() {
