@@ -51,6 +51,40 @@ and open the template in the editor.
 
                     <p:tab title="Sucursales">
                         
+                        <p:outputPanel id="botonesS">
+                            <p:commandButton value="Nuevo" actionListener="#{restauranteBean.nuevo}"  onclick="PF('dlgRestaurant').show();" />
+                            <p:commandButton value="Actualizar" actionListener="#{restauranteBean.actualizar}" update=":form:restDetail" onclick="PF('dlgRestaurant').show();"/>
+                        </p:outputPanel>
+
+                        <p:dataTable var="rest" value="#{restauranteBean.restaurantes}">
+                            <f:facet name="header">
+                                Restaurante
+                            </f:facet>
+
+                            <p:columnGroup type="header">
+                                <p:row>
+                                    <p:column rowspan="1" headerText="Direccion" />
+                                    <p:column rowspan="1" headerText="Telefono1" />
+                                    <p:column rowspan="1" headerText="Telefono2" />
+                                </p:row>                                
+                            </p:columnGroup>
+
+                            <p:subTable var="sucursal" value="#{rest.sucursales}">
+                                <f:facet name="header">
+                                    <h:outputText value="#{rest.nombre}" />
+                                </f:facet>
+                                <p:column>
+                                    <h:outputText value="#{sucursal.direccion}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{sucursal.telefono1}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{sucursal.telefono2}" />
+                                </p:column>
+                                
+                            </p:subTable>
+                        </p:dataTable>
 
                     </p:tab>
 

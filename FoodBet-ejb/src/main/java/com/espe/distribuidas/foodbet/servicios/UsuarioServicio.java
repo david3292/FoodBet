@@ -42,7 +42,7 @@ public class UsuarioServicio {
             if (user == null) {
                 String claveMd5 = DigestUtils.md5Hex(usuario.getClave());
                 usuario.setClave(claveMd5);
-                this.usuarioDAO.insert(user);
+                this.usuarioDAO.insert(usuario);
             } else {
                 throw new ValidacionException("El usuario ya existe");
             }
