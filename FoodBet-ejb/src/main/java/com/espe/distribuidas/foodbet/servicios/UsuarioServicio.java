@@ -55,4 +55,21 @@ public class UsuarioServicio {
         }
         return correcto;
     }
+    
+    public Usuario obtenerUsuario(String usuario, String clave){
+        boolean correcto = false;
+        Usuario user = this.usuarioDAO.findById(usuario, false);
+        if(user != null){
+            String claveMd5 = DigestUtils.md5Hex(clave);
+            if(user.getClave().equals(claveMd5))
+                correcto = true;
+        }else{
+            throw new ValidacionException("No se encontro el usuario");
+        }
+        if (correcto){
+            return user;
+        } else{
+            return null;
+        }
+    }
 }
