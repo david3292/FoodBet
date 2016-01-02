@@ -6,6 +6,7 @@
 package com.espe.distribuidas.foodbet.servicios;
 
 import com.espe.distribuidas.foodbet.dao.TipoDeporteDAO;
+import com.espe.distribuidas.foodbet.exceptions.ValidacionException;
 import com.espe.distribuidas.foodbet.modelo.TipoDeporte;
 import java.util.List;
 import javax.ejb.EJB;
@@ -31,5 +32,20 @@ public class TipoDeporteServicio {
         return this.tipoDeporteDAO.findById(codTD, false);
     }
     
+    public void ingresarTipoDeporte(TipoDeporte tipoDeport){
+        this.tipoDeporteDAO.insert(tipoDeport);
+    }
     
+    public void actualizarTipoDeporte(TipoDeporte tipoDeporte){
+        this.tipoDeporteDAO.update(tipoDeporte);
+    }
+    
+    public void eliminarTipoDeporte(Integer codTipoDep){
+        try {
+            TipoDeporte td = this.tipoDeporteDAO.findById(codTipoDep, false);
+            this.tipoDeporteDAO.remove(td);
+        } catch (Exception e) {
+            throw new ValidacionException("La registro tiene dependencias");
+        }
+    }
 }
