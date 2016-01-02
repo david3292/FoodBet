@@ -8,6 +8,7 @@ package com.espe.distribuidas.foodbet.servicios;
 import com.espe.distribuidas.foodbet.dao.UsuarioDAO;
 import com.espe.distribuidas.foodbet.exceptions.ValidacionException;
 import com.espe.distribuidas.foodbet.modelo.Usuario;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -26,6 +27,10 @@ public class UsuarioServicio {
      */
     @EJB
     private UsuarioDAO usuarioDAO;
+    
+    public List<Usuario> obtenerTodosLosUsuarios(){
+        return this.usuarioDAO.findAll();
+    }
 
     public Usuario obtenerUsuarioPorID(String usuario) {
         return this.usuarioDAO.findById(usuario, false);
