@@ -23,11 +23,11 @@
                                 <p:outputLabel for="itUsuarioLogin"
                                                value="Usuario:" />  
                                 <p:inputText id="itUsuarioLogin"
-                                             value="#{loginBean.usuario}" required="true" requiredMessage="Ingrese usuario"/>
+                                             value="#{loginBean.usuario}"/>
                                 <p:outputLabel for="itContraseniaLogin" 
                                                value="Contraseña:" />  
                                 <p:password id="itContraseniaLogin"
-                                            value="#{loginBean.clave}" required="true" requiredMessage="Ingrese Clave"/>  
+                                            value="#{loginBean.clave}"/>  
                             </h:panelGrid>
                             <h:panelGrid id="pgBotonesLogin" columns="2" cellspacing="2" cellpadding="2"
                                          style="margin-left: auto; margin-right: auto;">
@@ -35,7 +35,8 @@
                                                  style="height: 40px; font-size: 13px;"
                                                  update="pgLogin" action="#{loginBean.doLogin()}"/>
                                 <p:commandButton id="btnRegistrar" value="Registrarse" 
-                                                 style="height: 40px; font-size: 13px;"/> 
+                                                 style="height: 40px; font-size: 13px;"
+                                                 action="#{loginBean.registrarUsuario()}"/> 
                             </h:panelGrid>
 
                             <p:separator style="width: 300px;"/>

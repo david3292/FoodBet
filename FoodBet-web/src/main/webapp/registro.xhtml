@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="plantillas/template1.xhtml">
+        <ui:define name="content">
+            <h:form id="form">
+                <p:growl id="growl" showDetail="true" sticky="true" /> 
+                <p:messages id="msjError" showDetail="true" closable="true" autoUpdate="true"></p:messages>
+                <p:outputLabel value="REGISTRO DE USUARIOS"
+                               style="font-size: 23px;
+                               font-weight: bolder; 
+                               alignment-adjust: central"/>
+                <p:panelGrid columns="2" style="margin-left: 40px;">
+                    <p:panel header="Informacion de la Cuenta" style="height: 300px; width: 500px">
+                        <p:panelGrid columns="2" style="margin: auto; margin-top: 80px;">
+                            <p:outputLabel value="Usuario: " for="itUsuario"/>
+                            <p:inputText id="itUsuario" value="#{registroBean.nickname}" required="true" requiredMessage="Ingrese el Usuario" style="width: 220px"/>
+                            <p:outputLabel value="Password: " for="itClave" />
+                            <p:inputText id="itClave" value="#{registroBean.clave}" required="true" requiredMessage="Ingrese la Contraseña" style="width: 220px"/>
+                        </p:panelGrid>
+                    </p:panel>
+                    <p:panel header="Informacion Personal" style="height: 300px; width: 500px">
+                        <p:panelGrid columns="2" style="margin: auto; margin-top: 20px;">
+                            <p:outputLabel value="Nombre: " for="itNombre"/>
+                            <p:inputText id="itNombre" value="#{registroBean.nombre}" required="true" requiredMessage="Ingrese el Nombre" style="width: 220px"/>
+                            <p:outputLabel value="Apellido: " for="itApellido" />
+                            <p:inputText id="itApellido" value="#{registroBean.apellido}" required="true" requiredMessage="Ingrese el apellido" style="width: 220px"/>
+                            <p:outputLabel value="Direccion: " for="itDireccion"/>
+                            <p:inputText id="itDireccion" value="#{registroBean.direccion}" required="true" requiredMessage="Ingrese la dirección" style="width: 220px"/>
+                            <p:outputLabel value="Celular: " for="itCelular" />
+                            <p:inputText id="itCelular" value="#{registroBean.celular}" required="true" requiredMessage="Ingrese el celular" style="width: 220px"/>
+                            <p:outputLabel value="Telefono: " for="itTelefono"/>
+                            <p:inputText id="itTelefono" value="#{registroBean.telefono}" required="true" requiredMessage="Ingrese el telefono" style="width: 220px"/>
+                            <p:outputLabel value="Email: " for="itEmail" />
+                            <p:inputText id="itEmail" value="#{registroBean.mail}" required="true" requiredMessage="Ingrese el correo electrónico" style="width: 220px"/>
+                        </p:panelGrid>
+                    </p:panel>
+                    <p:commandButton id="btnAceptar" value="Aceptar" style="margin-left: 300px" action="#{registroBean.registrarUsuario()}"/>
+                    <p:commandButton id="btnCancelar" value="Cancelar" style="margin-left: -300px" action="#{registroBean.cancelar()}"/>
+                </p:panelGrid>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
