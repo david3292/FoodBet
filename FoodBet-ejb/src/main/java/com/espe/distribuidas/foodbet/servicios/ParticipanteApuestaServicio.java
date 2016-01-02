@@ -39,7 +39,11 @@ public class ParticipanteApuestaServicio {
     }
     
     public void ingresarParticipante(ParticipanteApuesta pa){
-        this.paDAO.insert(pa);
+        try {
+            this.paDAO.insert(pa);
+        } catch (Exception e) {
+            throw new ValidacionException("No se pudo ingresar el participante");
+        }
     }
     
     public void actualizarParticipante(ParticipanteApuesta pa){

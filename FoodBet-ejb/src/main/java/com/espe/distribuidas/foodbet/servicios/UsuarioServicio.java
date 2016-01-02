@@ -27,8 +27,8 @@ public class UsuarioServicio {
      */
     @EJB
     private UsuarioDAO usuarioDAO;
-    
-    public List<Usuario> obtenerTodosLosUsuarios(){
+
+    public List<Usuario> obtenerTodosLosUsuarios() {
         return this.usuarioDAO.findAll();
     }
 
@@ -37,25 +37,30 @@ public class UsuarioServicio {
     }
 
     public void ingresarUsuario(Usuario usuario) throws ValidacionException {
-        Usuario user = this.obtenerUsuarioPorID(usuario.getUsuario());
-        if (user == null) {
-            String claveMd5 = DigestUtils.md5Hex(usuario.getClave());
-            usuario.setClave(claveMd5);
-            this.usuarioDAO.insert(user);
-        } else {
-            throw new ValidacionException(null);
+        try {
+            Usuario user = this.obtenerUsuarioPorID(usuario.getUsuario());
+            if (user == null) {
+                String claveMd5 = DigestUtils.md5Hex(usuario.getClave());
+                usuario.setClave(claveMd5);
+                this.usuarioDAO.insert(user);
+            } else {
+                throw new ValidacionException("El usuario ya existe");
+            }
+        } catch (Exception e) {
+            throw new ValidacionException("No se pudo ingresar el usuario");
         }
     }
-    
-    public boolean login(String usuario, String clave){
+
+    public boolean login(String usuario, String clave) {
         boolean correcto = false;
-        
+
         Usuario user = this.usuarioDAO.findById(usuario, false);
-        if(user != null){
+        if (user != null) {
             String claveMd5 = DigestUtils.md5Hex(clave);
-            if(user.getClave().equals(claveMd5))
+            if (user.getClave().equals(claveMd5)) {
                 correcto = true;
-        }else{
+            }
+        } else {
             throw new ValidacionException("No se encontro el usuario");
         }
         return correcto;

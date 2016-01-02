@@ -8,13 +8,15 @@ and open the template in the editor.
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
     <ui:composition template="plantillas/template1.xhtml">
         <ui:define name="content">
             <h:form id="form">
                 <p:growl id="growl" showDetail="true" sticky="true" /> 
                 <p:messages id="msjError" showDetail="true" closable="true" autoUpdate="true"></p:messages>
                 <p:tabView id="tabAdm" dynamic="true" cache="false" orientation="left" style="width: 1140px">
+
                     <p:tab title="Restaurantes">
                         <p:outputPanel id="botonesR">
                             <p:commandButton value="Nuevo" actionListener="#{restauranteBean.nuevo}"  onclick="PF('dlgRestaurant').show();" />
@@ -25,6 +27,7 @@ and open the template in the editor.
                                      selectionMode="single" 
                                      selection="#{restauranteBean.restSelected}" 
                                      rowKey="#{rest.codRestaurante}">
+                            <f:facet name="header"> Restaurantes </f:facet>
                             <p:ajax event="rowSelect" listener="#{restauranteBean.onRowSelect}" update=":form:growl" />
                             <p:ajax event="rowUnselect" listener="#{restauranteBean.onRowUnselect}" update=":form:growl" />
                             <p:column headerText="Nombre">
@@ -45,6 +48,12 @@ and open the template in the editor.
                         </p:dataTable>
 
                     </p:tab>
+
+                    <p:tab title="Sucursales">
+                        
+
+                    </p:tab>
+
                     <p:tab title="Menú">
 
                     </p:tab>
@@ -61,15 +70,15 @@ and open the template in the editor.
                 <p:dialog header="Formulario Restaurante" widgetVar="dlgRestaurant" id="dlgRestaurant" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                     <p:panelGrid id="restDetail" columns="2" styleClass="noBorders" style="text-align:center; height: 200px!important; width: 500px">
                         Nombre
-                            <h:inputText id="txtNombreRA" value="#{restauranteBean.nombre}"/>
+                        <h:inputText id="txtNombreRA" value="#{restauranteBean.nombre}"/>
                         Direccion
-                            <h:inputText id="txtDescripcionRA" value="#{restauranteBean.direccion}" />
+                        <h:inputText id="txtDescripcionRA" value="#{restauranteBean.direccion}" />
                         Telefono
-                            <h:inputText id="txtTelefonoRA" value="#{restauranteBean.telefono}" />
+                        <h:inputText id="txtTelefonoRA" value="#{restauranteBean.telefono}" />
                         Telefono Secundario
-                            <h:inputText id="txtTelefonoSecundarioRA" value="#{restauranteBean.telefonoSecundario}" />
+                        <h:inputText id="txtTelefonoSecundarioRA" value="#{restauranteBean.telefonoSecundario}" />
                         Especialidad
-                            <h:inputText id="txtEspecialidadRA" value="#{restauranteBean.especialidad}"/>
+                        <h:inputText id="txtEspecialidadRA" value="#{restauranteBean.especialidad}"/>
                     </p:panelGrid>
                     <p:commandButton id="btnAceptarRestaurant" value="Aceptar"
                                      actionListener="#{restauranteBean.aceptar()}"
