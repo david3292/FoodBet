@@ -38,6 +38,7 @@ public class ApuestaMenuServicio {
      }
      
      public void actualizarApuestaMenu(ApuestaMenu am){
+         System.out.println("Ingresa a la actualizacion");
          this.apuestaManuDAO.update(am);
      }
      
