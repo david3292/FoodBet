@@ -15,14 +15,18 @@ and open the template in the editor.
                 <p:growl id="growl" showDetail="true" sticky="true" /> 
                 <p:messages id="msjError" showDetail="true" closable="true" autoUpdate="true"></p:messages>
                 <p:tabView id="tabAdm" dynamic="true" cache="false" orientation="left" style="width: 1140px">
-                    <p:tab title="Restaurants">
+                    <p:tab title="Restaurantes">
                         <p:outputPanel id="botonesR">
                             <p:commandButton value="Nuevo" oncomplete="dlgRestaurant.show();" update=":form" />
                             <p:commandButton value="Actualizar" actionListener="#{restauranteBean.cargarDatosActualizar}"
                                              update=":form"/>
                         </p:outputPanel>
 
-                        <p:dataTable id="restaurantes" var="rest" value="#{restauranteBean.restaurantes}" selectionMode="single" selection="#{restauranteBean.restSelected}" rowKey="#{rest.codRestaurante}">
+                        <p:dataTable id="restaurantes" 
+                                     var="rest" value="#{restauranteBean.restaurantes}" 
+                                     selectionMode="single" 
+                                     selection="#{restauranteBean.restSelected}" 
+                                     rowKey="#{rest.codRestaurante}">
                             <p:ajax event="rowSelect" listener="#{restauranteBean.onRowSelect}" update=":form:growl" />
                             <p:ajax event="rowUnselect" listener="#{restauranteBean.onRowUnselect}" update=":form:growl" />
                             <p:column headerText="Id">
