@@ -32,6 +32,12 @@ public class ParticipanteApuestaServicio {
         return this.paDAO.findById(codPA, false);
     }
     
+    public List<ParticipanteApuesta> obtenerParticipantePorMAIL(String mail){
+        ParticipanteApuesta pa = new ParticipanteApuesta();
+        pa.setEmail(mail);
+        return this.paDAO.findO(pa);
+    }
+    
     public void ingresarParticipante(ParticipanteApuesta pa){
         this.paDAO.insert(pa);
     }
