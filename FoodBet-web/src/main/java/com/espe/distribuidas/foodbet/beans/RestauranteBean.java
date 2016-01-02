@@ -89,6 +89,7 @@ public class RestauranteBean implements Serializable{
         restSelected.setTelefono2(telefonoSecundarioActualizar);
         restSelected.setEspecialidad(especialidadActualizar);
         restService.actualizarRestaurante(restSelected);
+        
         init();
     }
     
