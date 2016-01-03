@@ -25,6 +25,9 @@ public class Sucursal implements Serializable{
     @Column(name = "COD_SUCURSAL", nullable = false)
     private Integer codSucursal;
     
+    @Column(name = "COD_RESTAURANTE", nullable = false)
+    private Integer codRestaurante;
+    
     @JoinColumn(name = "COD_RESTAURANTE", referencedColumnName = "COD_RESTAURANTE", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Restaurante restaurante;
@@ -44,6 +47,14 @@ public class Sucursal implements Serializable{
 
     public void setCodSucursal(Integer codSucursal) {
         this.codSucursal = codSucursal;
+    }
+
+    public Integer getCodRestaurante() {
+        return codRestaurante;
+    }
+
+    public void setCodRestaurante(Integer codRestaurante) {
+        this.codRestaurante = codRestaurante;
     }
 
     public Restaurante getRestaurante() {

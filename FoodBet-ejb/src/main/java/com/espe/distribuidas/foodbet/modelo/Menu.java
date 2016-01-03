@@ -26,6 +26,9 @@ public class Menu implements Serializable{
     @Column(name = "COD_MENU", nullable = false)
     private Integer codMenu;
     
+    @Column(name = "COD_RESTAURANTE", nullable = false)
+    private Integer codRestaurante;
+    
     @JoinColumn(name = "COD_RESTAURANTE", referencedColumnName = "COD_RESTAURANTE", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Restaurante restaurante;
@@ -45,6 +48,14 @@ public class Menu implements Serializable{
 
     public void setCodMenu(Integer codMenu) {
         this.codMenu = codMenu;
+    }
+
+    public Integer getCodRestaurante() {
+        return codRestaurante;
+    }
+
+    public void setCodRestaurante(Integer codRestaurante) {
+        this.codRestaurante = codRestaurante;
     }
 
     public Restaurante getRestaurante() {

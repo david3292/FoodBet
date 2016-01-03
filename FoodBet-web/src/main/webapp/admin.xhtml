@@ -18,9 +18,10 @@ and open the template in the editor.
                 <p:tabView id="tabAdm" dynamic="true" cache="false" orientation="left" style="width: 1140px">
 
                     <p:tab title="Restaurantes">
+                        <!--Tabla restaurantes-->
                         <p:outputPanel id="botonesR">
-                            <p:commandButton value="Nuevo" actionListener="#{restauranteBean.nuevo}"  onclick="PF('dlgRestaurant').show();" />
-                            <p:commandButton value="Actualizar" actionListener="#{restauranteBean.actualizar}" update=":form:restDetail" onclick="PF('dlgRestaurant').show();"/>
+                            <p:commandButton value="Nuevo" actionListener="#{restauranteBean.nuevo()}"  onclick="PF('dlgRestaurant').show();" />
+                            <p:commandButton value="Actualizar" actionListener="#{restauranteBean.actualizar()}" update=":form:restDetail" onclick="PF('dlgRestaurant').show();"/>
                         </p:outputPanel>
                         <p:dataTable id="restaurantes" 
                                      var="rest" value="#{restauranteBean.restaurantes}" 
@@ -28,7 +29,7 @@ and open the template in the editor.
                                      selection="#{restauranteBean.restSelected}" 
                                      rowKey="#{rest.codRestaurante}">
                             <f:facet name="header"> Restaurantes </f:facet>
-                            <p:ajax event="rowSelect" listener="#{restauranteBean.onRowSelect}" update=":form:growl" />
+                            <p:ajax event="rowSelect" listener="#{restauranteBean.onRowSelect}" update=":form :form:growl" />
                             <p:ajax event="rowUnselect" listener="#{restauranteBean.onRowUnselect}" update=":form:growl" />
                             <p:column headerText="Nombre">
                                 <h:outputText value="#{rest.nombre}" />
@@ -46,51 +47,57 @@ and open the template in the editor.
                                 <h:outputText value="#{rest.especialidad}" />
                             </p:column>
                         </p:dataTable>
-
-                    </p:tab>
-
-                    <p:tab title="Sucursales">
                         
+                        <!--Tabla Sucursales-->
                         <p:outputPanel id="botonesS">
-                            <p:commandButton value="Nuevo" actionListener="#{restauranteBean.nuevo}"  onclick="PF('dlgRestaurant').show();" />
-                            <p:commandButton value="Actualizar" actionListener="#{restauranteBean.actualizar}" update=":form:restDetail" onclick="PF('dlgRestaurant').show();"/>
+                            <p:commandButton value="Nuevo" actionListener="#{restauranteBean.nuevaSucursal()}"  onclick = "PF('dlgSucursal').show();" />
+                            <p:commandButton value="Actualizar" actionListener="#{restauranteBean.actualizarSucursal()}" update=":form:sucursalDetail" onclick="PF('dlgSucursal').show();"/>
                         </p:outputPanel>
-
-                        <p:dataTable var="rest" value="#{restauranteBean.restaurantes}">
-                            <f:facet name="header">
-                                Restaurante
-                            </f:facet>
-
-                            <p:columnGroup type="header">
-                                <p:row>
-                                    <p:column rowspan="1" headerText="Direccion" />
-                                    <p:column rowspan="1" headerText="Telefono1" />
-                                    <p:column rowspan="1" headerText="Telefono2" />
-                                </p:row>                                
-                            </p:columnGroup>
-
-                            <p:subTable var="sucursal" value="#{rest.sucursales}">
-                                <f:facet name="header">
-                                    <h:outputText value="#{rest.nombre}" />
-                                </f:facet>
-                                <p:column>
-                                    <h:outputText value="#{sucursal.direccion}" />
-                                </p:column>
-                                <p:column>
-                                    <h:outputText value="#{sucursal.telefono1}" />
-                                </p:column>
-                                <p:column>
-                                    <h:outputText value="#{sucursal.telefono2}" />
-                                </p:column>
-                                
-                            </p:subTable>
+                        <p:dataTable id="sucursales" 
+                                     var="sucursal" value="#{restauranteBean.restSelected.sucursales}" 
+                                     selectionMode="single" 
+                                     selection="#{restauranteBean.sucursalSelected}" 
+                                     rowKey="#{sucursal.codSucursal}">
+                            <f:facet name="header"> Sucursales </f:facet>
+                            <p:ajax event="rowSelect" listener="#{restauranteBean.onRowSucursalSelect}" update=":form:growl" />
+                            <p:ajax event="rowUnselect" listener="#{restauranteBean.onRowUnselect}" update=":form:growl" />
+                            <p:column headerText="Direccion">
+                                <h:outputText value="#{sucursal.direccion}" />
+                            </p:column>
+                            <p:column headerText="Telefono1">
+                                <h:outputText value="#{sucursal.telefono1}" />
+                            </p:column>
+                            <p:column headerText="Telefono2">
+                                <h:outputText value="#{sucursal.telefono2}" />
+                            </p:column>                            
                         </p:dataTable>
-
+                        
+                        <!--Tabla Menus-->
+                        <p:outputPanel id="botonesM">
+                            <p:commandButton value="Nuevo" actionListener="#{restauranteBean.nuevo}"  onclick="PF('dlgRestaurant').show();" />
+                            <p:commandButton value="Actualizar" actionListener="#{restauranteBean.actualizar}" update=":form:sucursalDetail" onclick="PF('dlgSucursal').show();"/>
+                        </p:outputPanel>
+                        <p:dataTable id="menus" 
+                                     var="menu" value="#{restauranteBean.restSelected.menus}" 
+                                     selectionMode="single" 
+                                     selection="#{restauranteBean.menuSelected}" 
+                                     rowKey="#{menu.codMenu}">
+                            <f:facet name="header"> Menus </f:facet>
+                            <p:ajax event="rowSelect" listener="#{restauranteBean.onRowSelect}" update=":form:growl" />
+                            <p:ajax event="rowUnselect" listener="#{restauranteBean.onRowUnselect}" update=":form:growl" />
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{menu.nombre}" />
+                            </p:column>
+                            <p:column headerText="Precio">
+                                <h:outputText value="#{menu.precio}" />
+                            </p:column>
+                            <p:column headerText="Descripcion">
+                                <h:outputText value="#{menu.descripcion}" />
+                            </p:column>                            
+                        </p:dataTable>
+                        
                     </p:tab>
 
-                    <p:tab title="Menú">
-
-                    </p:tab>
                     <p:tab title="Equipo">
 
                     </p:tab>
@@ -101,6 +108,7 @@ and open the template in the editor.
 
                     </p:tab>
                 </p:tabView>
+                <!--Formulario restaurante-->
                 <p:dialog header="Formulario Restaurante" widgetVar="dlgRestaurant" id="dlgRestaurant" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                     <p:panelGrid id="restDetail" columns="2" styleClass="noBorders" style="text-align:center; height: 200px!important; width: 500px">
                         Nombre
@@ -121,6 +129,26 @@ and open the template in the editor.
                     <p:commandButton id="btnCancelarRestaurant" value="Cancelar"
                                      actionListener="#{restauranteBean.cancelar()}"
                                      update="@form" onclick="dlgRestaurant.hide()">
+                    </p:commandButton>
+                </p:dialog>
+                
+                <!--Formulario sucursal-->
+                <p:dialog header="Formulario Sucursal" widgetVar="dlgSucursal" id="dlgSucursal" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:panelGrid id="sucursalDetail" columns="2" styleClass="noBorders" style="text-align:center; height: 200px!important; width: 500px">
+                        Direccion
+                        <h:inputText id="txtDireccionS" value="#{restauranteBean.dirSucursal}"/>
+                        Telefono1
+                        <h:inputText id="txtTelefono1S" value="#{restauranteBean.tel1Sucursal}" />
+                        Telefono2
+                        <h:inputText id="txtTelefono2S" value="#{restauranteBean.tel2Sucursal}" />
+                    </p:panelGrid>
+                    <p:commandButton id="btnAceptarSucursal" value="Aceptar"
+                                     actionListener="#{restauranteBean.aceptarSucursal()}"
+                                     update="@form" onclick="dlgSucursal.hide()">
+                    </p:commandButton>
+                    <p:commandButton id="btnCancelarSucursal" value="Cancelar"
+                                     actionListener="#{restauranteBean.cancelarSucursal()}"
+                                     update="@form" onclick="dlgSucursal.hide()">
                     </p:commandButton>
                 </p:dialog>
             </h:form>
