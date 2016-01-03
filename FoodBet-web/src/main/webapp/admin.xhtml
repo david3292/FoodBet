@@ -16,7 +16,53 @@ and open the template in the editor.
                 <p:growl id="growl" showDetail="true" sticky="true" /> 
                 <p:messages id="msjError" showDetail="true" closable="true" autoUpdate="true"></p:messages>
                 <p:tabView id="tabAdm" dynamic="true" cache="false" orientation="left" style="width: 1140px">
+                    
+                    <p:tab title="Roles">
+                        
+                        <p:outputPanel id="botonNR">
+                            <p:commandButton value="Nuevo" actionListener="#{rolBean.nuevo()}" icon="fa-plus-circle" onclick = "PF('dlgRol').show();" />
+                        </p:outputPanel>
+                        
+                        <p:dataTable id="roles" var="rol" value="#{rolBean.roles}" editable="true" style="margin-bottom:20px">
+                            <f:facet name="header">
+                                Roles
+                            </f:facet>
 
+                            <p:ajax event="rowEdit" listener="#{rolBean.onRowEdit}" update=":form:growl" />
+                            <p:ajax event="rowEditCancel" listener="#{rolBean.onRowCancel}" update=":form:growl" />
+
+                            <p:column headerText="Id">
+                                <p:cellEditor> 
+                                    <f:facet  name="output"><h:outputText value="#{rol.codRol}"/></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput" value="#{rolBean.codRol}" rendered="false" style="width:100%"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Nombre">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{rol.nombre}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{rol.nombre}" style="width:100%" label="Year"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            
+                            <p:column headerText="Descripcion">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{rol.descripcion}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{rol.descripcion}" style="width:100%" label="Year"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column style="width:32px">
+                                <p:rowEditor />
+                            </p:column>
+                        </p:dataTable>
+                        
+                    </p:tab>
+                    
+                    <p:tab title="Usuario">
+
+                    </p:tab>
+                    
                     <p:tab title="Restaurantes">
                         <!--Tabla restaurantes-->
                         <p:outputPanel id="botonesR">
@@ -47,7 +93,7 @@ and open the template in the editor.
                                 <h:outputText value="#{rest.especialidad}" />
                             </p:column>
                         </p:dataTable>
-                        
+
                         <!--Tabla Sucursales-->
                         <p:outputPanel id="botonesS">
                             <p:commandButton value="Nuevo" actionListener="#{restauranteBean.nuevaSucursal()}"  onclick = "PF('dlgSucursal').show();" />
@@ -71,7 +117,7 @@ and open the template in the editor.
                                 <h:outputText value="#{sucursal.telefono2}" />
                             </p:column>                            
                         </p:dataTable>
-                        
+
                         <!--Tabla Menus-->
                         <p:outputPanel id="botonesM">
                             <p:commandButton value="Nuevo" actionListener="#{restauranteBean.nuevoMenu()}"  onclick="PF('dlgMenu').show();" />
@@ -95,18 +141,88 @@ and open the template in the editor.
                                 <h:outputText value="#{menu.descripcion}" />
                             </p:column>                            
                         </p:dataTable>
+
+                    </p:tab>
+                    
+                    <p:tab title="Deportes">
                         
+                        <p:outputPanel id="botonND">
+                            <p:commandButton value="Nuevo" actionListener="#{tipoDeporteBean.nuevo()}" icon="fa-plus-circle" onclick = "PF('dlgTipoDeporte').show();" />
+                        </p:outputPanel>
+                        
+                        <p:dataTable id="deportes" var="deporte" value="#{tipoDeporteBean.tipoDeportes}" editable="true" style="margin-bottom:20px">
+                            <f:facet name="header">
+                                Deportes
+                            </f:facet>
+
+                            <p:ajax event="rowEdit" listener="#{tipoDeporteBean.onRowEdit}" update=":form:growl" />
+                            <p:ajax event="rowEditCancel" listener="#{tipoDeporteBean.onRowCancel}" update=":form:growl" />
+
+                            <p:column headerText="Id">
+                                <p:cellEditor> 
+                                    <f:facet  name="output"><h:outputText value="#{deporte.codTipoDeporte}"/></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput" value="#{deporte.codTipoDeporte}" rendered="false" style="width:100%"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Nombre">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{deporte.nombre}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{deporte.nombre}" style="width:100%" label="Year"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            
+                            <p:column headerText="Descripcion">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{deporte.descripcion}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{deporte.descripcion}" style="width:100%" label="Year"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column style="width:32px">
+                                <p:rowEditor />
+                            </p:column>
+                        </p:dataTable>
                     </p:tab>
 
                     <p:tab title="Equipo">
+                        
+                        <p:outputPanel id="botonNE">
+                            <p:commandButton value="Nuevo" actionListener="#{equipoBean.nuevo()}" icon="fa-plus-circle" onclick = "PF('dlgEquipo').show();" />
+                        </p:outputPanel>
+                        
+                        <p:dataTable id="equipo" var="equipo" value="#{equipoBean.equipos}" editable="true" style="margin-bottom:20px">
+                            <f:facet name="header">
+                                Equipos
+                            </f:facet>
 
+                            <p:ajax event="rowEdit" listener="#{equipoBean.onRowEdit}" update=":form:growl" />
+                            <p:ajax event="rowEditCancel" listener="#{equipoBean.onRowCancel}" update=":form:growl" />
+
+                            <p:column headerText="Id">
+                                <p:cellEditor> 
+                                    <f:facet  name="output"><h:outputText value="#{equipo.codEquipo}"/></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput" value="#{equipo.codEquipo}" rendered="false" style="width:100%"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Nombre">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{equipo.nombre}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{equipo.nombre}" style="width:100%" label="Year"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column style="width:32px">
+                                <p:rowEditor />
+                            </p:column>
+                        </p:dataTable>
                     </p:tab>
+                    
                     <p:tab title="Evento Deportivo">
-
+                        
                     </p:tab>
-                    <p:tab title="Usuario">
 
-                    </p:tab>
                 </p:tabView>
                 <!--Formulario restaurante-->
                 <p:dialog header="Formulario Restaurante" widgetVar="dlgRestaurant" id="dlgRestaurant" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
@@ -131,7 +247,7 @@ and open the template in the editor.
                                      update="@form" onclick="dlgRestaurant.hide()">
                     </p:commandButton>
                 </p:dialog>
-                
+
                 <!--Formulario sucursal-->
                 <p:dialog header="Formulario Sucursal" widgetVar="dlgSucursal" id="dlgSucursal" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                     <p:panelGrid id="sucursalDetail" columns="2" styleClass="noBorders" style="text-align:center; height: 200px!important; width: 500px">
@@ -151,7 +267,7 @@ and open the template in the editor.
                                      update="@form" onclick="dlgSucursal.hide()">
                     </p:commandButton>
                 </p:dialog>
-                
+
                 <!--Formulario menu-->
                 <p:dialog header="Formulario Menu" widgetVar="dlgMenu" id="dlgMenu" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                     <p:panelGrid id="menuDetail" columns="2" styleClass="noBorders" style="text-align:center; height: 200px!important; width: 500px">
@@ -171,6 +287,48 @@ and open the template in the editor.
                                      update="@form" onclick="dlgRestaurant.hide()">
                     </p:commandButton>
                 </p:dialog>
+                
+                <!--Formulario equipo-->
+                <p:dialog header="Nuevo Equipo" widgetVar="dlgEquipo" id="dlgEquipo" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:panelGrid id="equipoDetail" columns="2" styleClass="noBorders" style="text-align:center; height: 50px!important; width: 500px">
+                        Nombre equipo
+                        <h:inputText id="txtNombreNE" value="#{equipoBean.nombreEquipo}"/>
+                    </p:panelGrid>
+                    <p:commandButton id="btnAceptarEquipo" value="Aceptar"
+                                     icon="fa-check"
+                                     actionListener="#{equipoBean.aceptar()}"
+                                     update=":form" onclick="dlgEuipo.hide()">
+                    </p:commandButton>
+                </p:dialog>
+                
+                <!--Formulario Tipo deporte-->
+                <p:dialog header="Nuevo Deporte" widgetVar="dlgTipoDeporte" id="dlgTipoDeporte" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:panelGrid id="tipoDeporteDetail" columns="2" styleClass="noBorders" style="text-align:center; height: 50px!important; width: 500px">
+                        Deporte
+                        <h:inputText id="txttipoDeporteD" value="#{tipoDeporteBean.nombreTD}"/>
+                        Descripcion
+                        <h:inputText id="txttipoDeporteDe" value="#{tipoDeporteBean.descripcionTD}"/>
+                    </p:panelGrid>
+                    <p:commandButton id="btnAceptarTipoDeporte" value="Aceptar"
+                                     actionListener="#{tipoDeporteBean.aceptar()}"
+                                     update=":form" onclick="dlgTipoDeporte.hide()">
+                    </p:commandButton>
+                </p:dialog>
+                
+                <!--Formulario Roles-->
+                <p:dialog header="Nuevo Rol" widgetVar="dlgRol" id="dlgRol" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:panelGrid id="rolDetail" columns="2" styleClass="noBorders" style="text-align:center; height: 50px!important; width: 500px">
+                        Nombre
+                        <h:inputText id="txtRolN" value="#{rolBean.nombreRol}"/>
+                        Descripcion
+                        <h:inputText id="txtRolD" value="#{rolBean.descRol}"/>
+                    </p:panelGrid>
+                    <p:commandButton id="btnAceptarRol" value="Aceptar"
+                                     actionListener="#{rolBean.aceptar()}"
+                                     update=":form" onclick="dlgRol.hide()">
+                    </p:commandButton>
+                </p:dialog>
+                
             </h:form>
         </ui:define>
     </ui:composition>
