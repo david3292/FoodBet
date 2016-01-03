@@ -24,23 +24,23 @@ public class MenuServicio {
     @EJB
     private MenuDAO menuDAO;
     
-    private List<Menu> obtenerTodoElMenu(){
+    public List<Menu> obtenerTodoElMenu(){
         return this.menuDAO.findAll();
     }
     
-    private Menu obtenerMenuPorID(Integer codMenu){
+    public Menu obtenerMenuPorID(Integer codMenu){
         return this.menuDAO.findById(codMenu, false);
     }
     
-    private void ingresarMenu(Menu manu){
+    public void ingresarMenu(Menu manu){
         this.menuDAO.insert(manu);
     }
     
-    private void actualizarMenu(Menu menu){
+    public void actualizarMenu(Menu menu){
         this.menuDAO.update(menu);
     }
     
-    private void eliminarMenu(Integer codMenu){
+    public void eliminarMenu(Integer codMenu){
         try{
             Menu menu = this.menuDAO.findById(codMenu, false);
             this.menuDAO.remove(menu);

@@ -65,10 +65,11 @@ public class RestauranteBean extends BaseBean implements Serializable {
 
     private List<Menu> menus;
     private Menu menuSelected;
+    private Menu menu;
     private boolean enNuevoMenu;
     private boolean enModificarMenu;
     private String menuNombre = "";
-    private BigDecimal menuPrecio = new BigDecimal(0);
+    private String menuPrecio = null;
     private String menuDescripcion = "";
 
     @PostConstruct
@@ -122,6 +123,15 @@ public class RestauranteBean extends BaseBean implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         context.update(":form:sucursalDetail");
     }
+    
+    public void nuevoMenu(){
+        this.enNuevoMenu = true;
+        System.out.println("Ingreso al metodo nuevo menu");
+        this.menu = new Menu();
+        this.menu.setCodRestaurante(this.restSelected.getCodRestaurante());
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update(":form:menuDetail");
+    }
 
     public void actualizar() {
         super.modificar();
@@ -160,6 +170,24 @@ public class RestauranteBean extends BaseBean implements Serializable {
             Logger.getLogger(RestauranteBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void actualizarMenu(){
+        this.enModificarMenu = true;
+        this.menu = new Menu();
+        try {
+            BeanUtils.copyProperties(this.menu, this.menuSelected);
+            System.out.println("Actualizar menu: " + this.menu.toString());
+            this.menuNombre = this.menu.getNombre();
+            this.menuPrecio = this.menu.getPrecio().toString();
+            this.menuDescripcion = this.menu.getDescripcion();
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.update(":form:menuDetail");
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(RestauranteBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(RestauranteBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @Override
     public void cancelar() {
@@ -172,6 +200,13 @@ public class RestauranteBean extends BaseBean implements Serializable {
         this.dirSucursal = "";
         this.tel1Sucursal = "";
         this.tel2Sucursal = "";
+    }
+    
+    public void cancelarMenu(){
+        this.resetMenu();
+        this.menuNombre = "";
+        this.menuPrecio = null;
+        this.menuDescripcion = "";
     }
 
     //para ingresar nuevo o actualizar 
@@ -229,10 +264,36 @@ public class RestauranteBean extends BaseBean implements Serializable {
         this.resetSucursal();
         init();
     }
+    
+    public void aceptarMenu(){
+        if(this.isEnNuevoMenu()){
+            System.out.println("Ingresa a la funcion aceptarMenu");
+            this.menu.setNombre(menuNombre);
+            this.menu.setPrecio(new BigDecimal(menuPrecio));
+            this.menu.setDescripcion(this.menuDescripcion);
+            this.menuServicio.ingresarMenu(menu);
+            
+            this.restSelected = this.restService.obtenerRestaurantePorID(this.restSelected.getCodRestaurante());
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.update(":form:menuDetail");
+        }else{
+            System.out.println("Funcion actualizar menu" + this.menu.toString());
+            this.menu.setNombre(this.menuNombre);
+            this.menu.setPrecio(new BigDecimal(this.menuPrecio));
+            this.menu.setDescripcion(this.menuDescripcion);
+            this.menuServicio.actualizarMenu(menu);
+        }
+        this.resetMenu();
+    }
 
     public void resetSucursal() {
         this.enNuevoSucursal = false;
         this.enModificarSucursal = false;
+    }
+    
+    public void resetMenu(){
+        this.enNuevoMenu = false;
+        this.enModificarMenu = false;
     }
 
     public RestauranteServicio getRestService() {
@@ -411,11 +472,11 @@ public class RestauranteBean extends BaseBean implements Serializable {
         this.menuNombre = menuNombre;
     }
 
-    public BigDecimal getMenuPrecio() {
+    public String getMenuPrecio() {
         return menuPrecio;
     }
 
-    public void setMenuPrecio(BigDecimal menuPrecio) {
+    public void setMenuPrecio(String menuPrecio) {
         this.menuPrecio = menuPrecio;
     }
 
@@ -438,6 +499,12 @@ public class RestauranteBean extends BaseBean implements Serializable {
         FacesMessage msg = new FacesMessage("Sucursal seleccionada", ((Sucursal) event.getObject()).getDireccion());
         FacesContext.getCurrentInstance().addMessage(null, msg);
         System.out.println("Seleccion Sucursal: " + this.sucursalSelected.toString());
+        init();
+    }
+    
+    public void onRowMenuSelect(SelectEvent event) {
+        FacesMessage msg = new FacesMessage("Menu seleccionado", ((Menu) event.getObject()).getNombre());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
         init();
     }
 

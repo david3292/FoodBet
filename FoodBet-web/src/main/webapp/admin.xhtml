@@ -74,8 +74,8 @@ and open the template in the editor.
                         
                         <!--Tabla Menus-->
                         <p:outputPanel id="botonesM">
-                            <p:commandButton value="Nuevo" actionListener="#{restauranteBean.nuevo}"  onclick="PF('dlgRestaurant').show();" />
-                            <p:commandButton value="Actualizar" actionListener="#{restauranteBean.actualizar}" update=":form:sucursalDetail" onclick="PF('dlgSucursal').show();"/>
+                            <p:commandButton value="Nuevo" actionListener="#{restauranteBean.nuevoMenu()}"  onclick="PF('dlgMenu').show();" />
+                            <p:commandButton value="Actualizar" actionListener="#{restauranteBean.actualizarMenu()}" update=":form:menuDetail" onclick="PF('dlgMenu').show();"/>
                         </p:outputPanel>
                         <p:dataTable id="menus" 
                                      var="menu" value="#{restauranteBean.restSelected.menus}" 
@@ -83,7 +83,7 @@ and open the template in the editor.
                                      selection="#{restauranteBean.menuSelected}" 
                                      rowKey="#{menu.codMenu}">
                             <f:facet name="header"> Menus </f:facet>
-                            <p:ajax event="rowSelect" listener="#{restauranteBean.onRowSelect}" update=":form:growl" />
+                            <p:ajax event="rowSelect" listener="#{restauranteBean.onRowMenuSelect}" update=":form:growl" />
                             <p:ajax event="rowUnselect" listener="#{restauranteBean.onRowUnselect}" update=":form:growl" />
                             <p:column headerText="Nombre">
                                 <h:outputText value="#{menu.nombre}" />
@@ -149,6 +149,26 @@ and open the template in the editor.
                     <p:commandButton id="btnCancelarSucursal" value="Cancelar"
                                      actionListener="#{restauranteBean.cancelarSucursal()}"
                                      update="@form" onclick="dlgSucursal.hide()">
+                    </p:commandButton>
+                </p:dialog>
+                
+                <!--Formulario menu-->
+                <p:dialog header="Formulario Menu" widgetVar="dlgMenu" id="dlgMenu" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:panelGrid id="menuDetail" columns="2" styleClass="noBorders" style="text-align:center; height: 200px!important; width: 500px">
+                        Plato
+                        <h:inputText id="txtNombreMN" value="#{restauranteBean.menuNombre}"/>
+                        Precio
+                        <h:inputText id="txtPrecioM" value="#{restauranteBean.menuPrecio}" />
+                        Descripcion
+                        <h:inputText id="txtDescripcionM" value="#{restauranteBean.menuDescripcion}" />
+                    </p:panelGrid>
+                    <p:commandButton id="btnAceptarMenu" value="Aceptar"
+                                     actionListener="#{restauranteBean.aceptarMenu()}"
+                                     update=":form" onclick="dlgRestaurant.hide()">
+                    </p:commandButton>
+                    <p:commandButton id="btnCancelarMenu" value="Cancelar"
+                                     actionListener="#{restauranteBean.cancelarMenu()}"
+                                     update="@form" onclick="dlgRestaurant.hide()">
                     </p:commandButton>
                 </p:dialog>
             </h:form>
