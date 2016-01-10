@@ -50,11 +50,16 @@ public class UsuarioServicio {
             throw new ValidacionException("No se pudo ingresar el usuario");
         }
     }
+    
+    public void actualizarUsuario(Usuario u){
+        this.usuarioDAO.update(u);
+    }
 
     public boolean login(String usuario, String clave) {
         boolean correcto = false;
 
         Usuario user = this.usuarioDAO.findById(usuario, false);
+        System.out.println("usuario encontrado " + user.toString());
         if (user != null) {
             String claveMd5 = DigestUtils.md5Hex(clave);
             if (user.getClave().equals(claveMd5)) {

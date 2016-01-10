@@ -33,6 +33,9 @@ public class Usuario implements Serializable{
     @Column(name = "ESTADO", nullable = false)
     private Integer estado;
     
+    @Column(name = "COD_ROL", nullable = false)
+    private Integer codRol;
+    
     @JoinColumn(name = "COD_ROL", referencedColumnName = "COD_ROL", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Rol rol;
@@ -40,6 +43,7 @@ public class Usuario implements Serializable{
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_PARTICIPANTE")
     private ParticipanteApuesta participanteApuesta;
+    
 
     public String getUsuario() {
         return usuario;
@@ -80,6 +84,22 @@ public class Usuario implements Serializable{
     public void setParticipanteApuesta(ParticipanteApuesta participanteApuesta) {
         this.participanteApuesta = participanteApuesta;
     }
+    
+    public String getEstadoUser(){        
+        return (this.estado == 1) ? "Activo" : "Deshabilitado";
+    }
+    
+    public void cambiarEstado(String e){
+        this.estado = (e.equals("Activo")? 1 : 0);
+    }
+
+    public Integer getCodRol() {
+        return codRol;
+    }
+
+    public void setCodRol(Integer codRol) {
+        this.codRol = codRol;
+    }
 
     @Override
     public int hashCode() {
@@ -105,7 +125,7 @@ public class Usuario implements Serializable{
 
     @Override
     public String toString() {
-        return "Usuario{" + "usuario=" + usuario + ", clave=" + clave + ", estado=" + estado + ", rol=" + rol + '}';
+        return "Usuario{" + "usuario=" + usuario + ", clave=" + clave + ", estado=" + estado + ", codRol=" + codRol + ", rol=" + rol + ", participanteApuesta=" + participanteApuesta + '}';
     }
-    
+
 }

@@ -2,10 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-    <artifactId>FoodBet</artifactId>
-    <groupId>com.espe.distribuidas.foodbet</groupId>
-    <version>1</version>
-  </parent>
+        <artifactId>FoodBet</artifactId>
+        <groupId>com.espe.distribuidas.foodbet</groupId>
+        <version>1</version>
+    </parent>
 
     <groupId>com.espe.distribuidas.foodbet</groupId>
     <artifactId>FoodBet-ejb</artifactId>
@@ -49,9 +49,10 @@
         </dependency>
         <dependency>
             <groupId>javax.mail</groupId>
-            <artifactId>javax.mail-api</artifactId>
-            <version>1.5.3</version>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
         </dependency>
+
     </dependencies>
 
     <build>

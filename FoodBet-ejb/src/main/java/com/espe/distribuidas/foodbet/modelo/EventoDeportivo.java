@@ -6,6 +6,7 @@
 package com.espe.distribuidas.foodbet.modelo;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,6 +28,9 @@ public class EventoDeportivo implements Serializable{
     @Id
     @Column(name = "COD_EVENTO", nullable = false)
     private Integer codEvento;
+    
+    @Column(name = "COD_DEPORTE", nullable = false)
+    private Integer codDeporte;
     
     @JoinColumn(name = "COD_DEPORTE", referencedColumnName = "COD_DEPORTE", insertable = false, updatable = false)
     @ManyToOne(optional = false)
@@ -82,6 +86,19 @@ public class EventoDeportivo implements Serializable{
         this.descripcionEvento = descripcionEvento;
     }
 
+    public Integer getCodDeporte() {
+        return codDeporte;
+    }
+
+    public void setCodDeporte(Integer codDeporte) {
+        this.codDeporte = codDeporte;
+    }
+    
+    public String getFormatDate(){
+        SimpleDateFormat f = new SimpleDateFormat("dd-MM-yy");
+        return f.format(fechaEvento);
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -106,7 +123,6 @@ public class EventoDeportivo implements Serializable{
 
     @Override
     public String toString() {
-        return "EventoDeportivo{" + "codEvento=" + codEvento + ", tipoDeporte=" + tipoDeporte + ", nombreEvento=" + nombreEvento + ", fechaEvento=" + fechaEvento + ", descripcionEvento=" + descripcionEvento + '}';
+        return "EventoDeportivo{" + "codEvento=" + codEvento + ", codDeporte=" + codDeporte + ", tipoDeporte=" + tipoDeporte + ", nombreEvento=" + nombreEvento + ", fechaEvento=" + fechaEvento + ", descripcionEvento=" + descripcionEvento + '}';
     }
-    
 }

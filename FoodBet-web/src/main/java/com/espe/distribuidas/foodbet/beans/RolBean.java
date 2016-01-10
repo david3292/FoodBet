@@ -38,6 +38,7 @@ public class RolBean implements Serializable{
     
     @PostConstruct
     public void init(){
+        this.rol = new Rol();
         this.roles = this.rolService.obtenerTodosRoles();
     }
     
@@ -55,6 +56,14 @@ public class RolBean implements Serializable{
         this.nombreRol = null;
         this.descRol = null;
         this.init();
+    }
+    
+    public void eliminar( Rol r){
+        System.out.println("rolllll : "+ rol.toString());
+        this.addMessageDelete("Eliminado", this.codRol);
+        System.out.println("Se elimina el rol" + this.rol);
+        //this.rolService.eliminarRol(rol.getCodRol());
+        
     }
 
     public List<Rol> getRoles() {
@@ -117,6 +126,11 @@ public class RolBean implements Serializable{
     public void onRowCancel(RowEditEvent event) {
         FacesMessage msg = new FacesMessage("Edición Cancelada", ((Rol) event.getObject()).getNombre());
         FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    public void addMessageDelete(String summary, String detail) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
     
 }

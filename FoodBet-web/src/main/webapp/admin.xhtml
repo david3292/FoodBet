@@ -13,17 +13,21 @@ and open the template in the editor.
     <ui:composition template="plantillas/template1.xhtml">
         <ui:define name="content">
             <h:form id="form">
-                <p:growl id="growl" showDetail="true" sticky="true" /> 
+                <p:growl id="growl" showDetail="true" life="3000"/> 
                 <p:messages id="msjError" showDetail="true" closable="true" autoUpdate="true"></p:messages>
                 <p:tabView id="tabAdm" dynamic="true" cache="false" orientation="left" style="width: 1140px">
-                    
+
                     <p:tab title="Roles">
-                        
+
                         <p:outputPanel id="botonNR">
-                            <p:commandButton value="Nuevo" actionListener="#{rolBean.nuevo()}" icon="fa-plus-circle" onclick = "PF('dlgRol').show();" />
+                            <p:commandButton value="Nuevo"
+                                             actionListener="#{rolBean.nuevo()}" 
+                                             icon="ui-icon-plus" 
+                                             onclick = "PF('dlgRol').show();"/>
                         </p:outputPanel>
-                        
-                        <p:dataTable id="roles" var="rol" value="#{rolBean.roles}" editable="true" style="margin-bottom:20px">
+
+                        <p:dataTable id="roles" var="rol" value="#{rolBean.roles}" editable="true" style="margin-bottom:20px" 
+                                     >
                             <f:facet name="header">
                                 Roles
                             </f:facet>
@@ -31,21 +35,21 @@ and open the template in the editor.
                             <p:ajax event="rowEdit" listener="#{rolBean.onRowEdit}" update=":form:growl" />
                             <p:ajax event="rowEditCancel" listener="#{rolBean.onRowCancel}" update=":form:growl" />
 
-                            <p:column headerText="Id">
+                            <p:column headerText="Id" style="width:32px">
                                 <p:cellEditor> 
                                     <f:facet  name="output"><h:outputText value="#{rol.codRol}"/></f:facet>
                                     <f:facet name="input"><p:inputText id="modelInput" value="#{rolBean.codRol}" rendered="false" style="width:100%"/></f:facet>
                                 </p:cellEditor>
                             </p:column>
 
-                            <p:column headerText="Nombre">
+                            <p:column headerText="Nombre" style="width:256px ; text-align: left">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{rol.nombre}" /></f:facet>
                                     <f:facet name="input"><p:inputText value="#{rol.nombre}" style="width:100%" label="Year"/></f:facet>
                                 </p:cellEditor>
                             </p:column>
-                            
-                            <p:column headerText="Descripcion">
+
+                            <p:column headerText="Descripcion" style="width:auto; text-align: left">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{rol.descripcion}" /></f:facet>
                                     <f:facet name="input"><p:inputText value="#{rol.descripcion}" style="width:100%" label="Year"/></f:facet>
@@ -55,14 +59,79 @@ and open the template in the editor.
                             <p:column style="width:32px">
                                 <p:rowEditor />
                             </p:column>
+
+                            <p:column style="width:32px;text-align: center">
+                                <p:commandButton actionListener="#{rolBean.eliminar}" icon="ui-icon-close"
+                                                 style="border-style: none; background: none; icon: initial" >
+                                    <f:setPropertyActionListener value="#{rol}" target="#{rolBean.rol}" />
+                                    <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                            </p:column>
                         </p:dataTable>
-                        
-                    </p:tab>
-                    
-                    <p:tab title="Usuario">
 
                     </p:tab>
-                    
+
+                    <p:tab title="Usuario">
+
+                        <p:outputPanel id="botonNU">
+                            <p:commandButton value="Nuevo"
+                                             actionListener="#{usuarioBean.nuevo()}" 
+                                             icon="ui-icon-plus" 
+                                             onclick = "PF('dlgUsuario').show();"/>
+                        </p:outputPanel>
+
+                        <p:dataTable id="usuarios" var="user" value="#{usuarioBean.usuarios}" editable="true">
+                            <f:facet name="header">
+                                Usuarios
+                            </f:facet>
+
+                            <p:ajax event="rowEdit" listener="#{usuarioBean.onRowEditUser}" update=":form:growl" />
+                            <p:ajax event="rowEditCancel" listener="#{usuarioBean.onRowCancelUser}" update=":form:growl" />
+
+                            <p:column headerText="Usuario" style="text-align: left">
+                                <p:cellEditor> 
+                                    <f:facet  name="output"><h:outputText value="#{user.usuario}"/></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput" value="#{user.usuario}" rendered="false" style="width:100%"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Rol" style="width:256px ; text-align: left">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{user.rol.nombre}" /></f:facet>
+                                    <f:facet name="input">
+                                        <h:selectOneMenu value="#{user.codRol}" style="width:100%">
+                                            <f:selectItems value="#{usuarioBean.roles}" var="rol" itemLabel="#{rol.nombre}" itemValue="#{rol.codRol}" />
+                                        </h:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Estado" style="width:256px ; text-align: left">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{user.estadoUser}" /></f:facet>
+                                    <f:facet name="input">
+                                        <h:selectOneMenu value="#{usuarioBean.estado}" style="width:100%">
+                                            <f:selectItems value="#{usuarioBean.estados}" var="estado" itemLabel="#{estado}" itemValue="#{estado}" />
+                                        </h:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column style="width:32px">
+                                <p:rowEditor />
+                            </p:column>
+
+                            <p:column style="width:32px;text-align: center">
+                                <p:commandButton actionListener="#{rolBean.eliminar}" icon="ui-icon-close"
+                                                 style="border-style: none; background: none; icon: initial" >
+                                    <f:setPropertyActionListener value="#{rol}" target="#{rolBean.rol}" />
+                                    <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+
+                    </p:tab>
+
                     <p:tab title="Restaurantes">
                         <!--Tabla restaurantes-->
                         <p:outputPanel id="botonesR">
@@ -143,13 +212,13 @@ and open the template in the editor.
                         </p:dataTable>
 
                     </p:tab>
-                    
+
                     <p:tab title="Deportes">
-                        
+
                         <p:outputPanel id="botonND">
                             <p:commandButton value="Nuevo" actionListener="#{tipoDeporteBean.nuevo()}" icon="fa-plus-circle" onclick = "PF('dlgTipoDeporte').show();" />
                         </p:outputPanel>
-                        
+
                         <p:dataTable id="deportes" var="deporte" value="#{tipoDeporteBean.tipoDeportes}" editable="true" style="margin-bottom:20px">
                             <f:facet name="header">
                                 Deportes
@@ -171,7 +240,7 @@ and open the template in the editor.
                                     <f:facet name="input"><p:inputText value="#{deporte.nombre}" style="width:100%" label="Year"/></f:facet>
                                 </p:cellEditor>
                             </p:column>
-                            
+
                             <p:column headerText="Descripcion">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{deporte.descripcion}" /></f:facet>
@@ -182,15 +251,16 @@ and open the template in the editor.
                             <p:column style="width:32px">
                                 <p:rowEditor />
                             </p:column>
+
                         </p:dataTable>
                     </p:tab>
 
                     <p:tab title="Equipo">
-                        
+
                         <p:outputPanel id="botonNE">
                             <p:commandButton value="Nuevo" actionListener="#{equipoBean.nuevo()}" icon="fa-plus-circle" onclick = "PF('dlgEquipo').show();" />
                         </p:outputPanel>
-                        
+
                         <p:dataTable id="equipo" var="equipo" value="#{equipoBean.equipos}" editable="true" style="margin-bottom:20px">
                             <f:facet name="header">
                                 Equipos
@@ -218,9 +288,59 @@ and open the template in the editor.
                             </p:column>
                         </p:dataTable>
                     </p:tab>
-                    
+
                     <p:tab title="Evento Deportivo">
-                        
+
+                        <p:outputPanel id="botonNED">
+                            <p:commandButton value="Nuevo"
+                                             actionListener="#{eventoBean.nuevo()}" 
+                                             icon="ui-icon-plus" 
+                                             onclick = "PF('dlgEvento').show();"/>
+                        </p:outputPanel>
+
+                        <p:dataTable id="evento" var="evento" value="#{eventoBean.eventos}" editable="true" style="margin-bottom:20px"
+                                     widgetVar="eventosTable"
+                                     emptyMessage="No se encontraron eventos"
+                                     filteredValue="#{eventoBean.eventosFiltered}">
+
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Buscar:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('eventosTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <p:ajax event="rowEdit" listener="#{eventoBean.onRowEditEvento}" update=":form:growl" />
+                            <p:ajax event="rowEditCancel" listener="#{eventoBean.onRowCancelEvento}" update=":form:growl" />
+
+                            <p:column headerText="Id" filterBy="#{evento.codEvento}" filterMatchMode="exact">
+                                <p:cellEditor> 
+                                    <f:facet  name="output"><h:outputText value="#{evento.codEvento}"/></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput" value="#{eventoBean.codDeporte}" disabled="true" style="width:100%"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Nombre" filterBy="#{evento.nombreEvento}" filterMatchMode="contains">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{evento.nombreEvento}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{evento.nombreEvento}" style="width:100%" label="Year"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Fecha" filterBy="#{evento.formatDate}" filterMatchMode="contains">
+                                <f:facet name="filter">
+                                    <p:calendar id="popupC" pattern="dd-MM-yyyy"/>
+                                </f:facet>
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{evento.formatDate}" /></f:facet>
+                                    <f:facet name="input"><p:calendar id="popup" value="#{evento.fechaEvento}" pattern="dd-MM-yyyy" /></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column style="width:32px">
+                                <p:rowEditor />
+                            </p:column>
+                        </p:dataTable>
+
                     </p:tab>
 
                 </p:tabView>
@@ -287,7 +407,7 @@ and open the template in the editor.
                                      update="@form" onclick="dlgRestaurant.hide()">
                     </p:commandButton>
                 </p:dialog>
-                
+
                 <!--Formulario equipo-->
                 <p:dialog header="Nuevo Equipo" widgetVar="dlgEquipo" id="dlgEquipo" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                     <p:panelGrid id="equipoDetail" columns="2" styleClass="noBorders" style="text-align:center; height: 50px!important; width: 500px">
@@ -300,7 +420,7 @@ and open the template in the editor.
                                      update=":form" onclick="dlgEuipo.hide()">
                     </p:commandButton>
                 </p:dialog>
-                
+
                 <!--Formulario Tipo deporte-->
                 <p:dialog header="Nuevo Deporte" widgetVar="dlgTipoDeporte" id="dlgTipoDeporte" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                     <p:panelGrid id="tipoDeporteDetail" columns="2" styleClass="noBorders" style="text-align:center; height: 50px!important; width: 500px">
@@ -314,21 +434,77 @@ and open the template in the editor.
                                      update=":form" onclick="dlgTipoDeporte.hide()">
                     </p:commandButton>
                 </p:dialog>
-                
+
                 <!--Formulario Roles-->
                 <p:dialog header="Nuevo Rol" widgetVar="dlgRol" id="dlgRol" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                    <p:panelGrid id="rolDetail" columns="2" styleClass="noBorders" style="text-align:center; height: 50px!important; width: 500px">
+                    <p:panelGrid id="rolDetail" columns="2" styleClass="noBorders" style="text-align:left; max-height:100px;  height: 100px!important; width: 500px">
                         Nombre
-                        <h:inputText id="txtRolN" value="#{rolBean.nombreRol}"/>
+                        <p:inputText id="txtRolN" value="#{rolBean.nombreRol}"/>
                         Descripcion
-                        <h:inputText id="txtRolD" value="#{rolBean.descRol}"/>
+                        <p:inputTextarea rows="6" cols="33" value="#{rolBean.descRol}"/>
                     </p:panelGrid>
                     <p:commandButton id="btnAceptarRol" value="Aceptar"
                                      actionListener="#{rolBean.aceptar()}"
                                      update=":form" onclick="dlgRol.hide()">
                     </p:commandButton>
                 </p:dialog>
-                
+
+                <!--Dialogo de confirmacion-->
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+
+                <!--Formulario Usuario -->
+                <p:dialog header="Nuevo Usuario" widgetVar="dlgUsuario" id="dlgUsuario" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:panelGrid id="usuarioDetail" columns="2" styleClass="noBorders" style="text-align:left; max-height:100px;  height: 100px!important; width: 500px">
+                        Usuario
+                        <p:inputText id="txtUsuarioU" value="#{usuarioBean.usuario}"/>
+                        Clave
+                        <p:inputText id="txtUsuarioC" value="#{usuarioBean.clave}"/>
+                        Estado
+                        <p:selectOneMenu value="#{usuarioBean.estado}" style="width:50%">
+                            <f:selectItems value="#{usuarioBean.estados}" var="estado" itemLabel="#{estado}" itemValue="#{estado}" />
+                        </p:selectOneMenu>
+                        Rol
+                        <p:selectOneMenu value="#{usuarioBean.codRol}">
+                            <f:selectItems value="#{usuarioBean.roles}" var="rol" itemLabel="#{rol.nombre}" itemValue="#{rol.codRol}"/>
+                        </p:selectOneMenu>
+
+                    </p:panelGrid>
+                    <p:commandButton id="btnAceptarUsuario" value="Aceptar"
+                                     actionListener="#{usuarioBean.aceptar()}"
+                                     update=":form" onclick="dlgUsuario.hide()">
+                    </p:commandButton>
+                    <p:commandButton id="btnCancelarUsuario" value="Cancelar"
+                                     actionListener="#{usuarioBean.cancelar()}"
+                                     update=":form" onclick="dlgUsuario.hide()">
+                    </p:commandButton>
+                </p:dialog>
+
+                <!--Formulario Evento -->
+                <p:dialog header="Nuevo Evento Deportivo" widgetVar="dlgEvento" id="dlgEvento" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:panelGrid id="eventoDetail" columns="2" styleClass="noBorders" style="text-align:left; max-height:100px;  height: 100px!important; width: 500px">
+                        Evento:
+                        <p:inputText id="txtEventoN" value="#{eventoBean.nombreEvento}"/>
+                        Tipo:
+                        <p:selectOneMenu value="#{eventoBean.codDeporte}">
+                            <f:selectItems value="#{tipoDeporteBean.tipoDeportes}" var="deporte" itemLabel="#{deporte.nombre}" itemValue="#{deporte.codTipoDeporte}"/>
+                        </p:selectOneMenu>
+                        Fecha:
+                        <p:calendar id="popup" value="#{eventoBean.fechaEvento}" pattern="dd-MM-yyyy"/>
+
+                    </p:panelGrid>
+                    <p:commandButton id="btnAceptarEvento" value="Aceptar"
+                                     actionListener="#{eventoBean.aceptar()}"
+                                     update=":form" onclick="dlgEvento.hide()">
+                    </p:commandButton>
+                    <p:commandButton id="btnCancelarEvento" value="Cancelar"
+                                     actionListener="#{eventoBean.cancelar()}"
+                                     update=":form" onclick="dlgEvento.hide()">
+                    </p:commandButton>
+                </p:dialog>
+
             </h:form>
         </ui:define>
     </ui:composition>
