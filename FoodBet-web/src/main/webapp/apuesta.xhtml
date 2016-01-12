@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:composition template="plantillas/template1.xhtml">
+        <ui:define name="content">
+            <h:form id="form">
+                <p:growl id="growl" showDetail="true" sticky="true" /> 
+                <p:messages id="msjError" showDetail="true" closable="true" autoUpdate="true"></p:messages>
+                <p:panelGrid columns="2" style="margin: auto;">
+                    <p:panelGrid columns="1" style="margin-left: 0px; overflow: auto;
+                                 width: 300px;" >
+                        <p:dataList value="#{apuestaBean.eventos}" var="evento" type="unordered" itemType="none" paginator="true" rows="10" styleClass="paginated" style="margin-top: 0px;">
+                            <f:facet name="header">
+                                EVENTOS DEPORTIVOS
+                            </f:facet>
+                            <p:commandLink update=":form:eventoDetail" oncomplete="PF('eventoDialog').show()" title="Detalle Evento" style="margin-left: 0px">
+                                <f:setPropertyActionListener value="#{evento}" target="#{apuestaBean.eventoSeleccionado}" />
+                                <h:outputText value="#{evento.tipoDeporte.nombre}: #{evento.nombreEvento}, #{evento.fechaEvento}" />
+                            </p:commandLink>
+                            <h:outputText value="#{evento.tipoDeporte.nombre}: #{evento.nombreEvento}, #{evento.fechaEvento}" style="display:inline-block"/>
+                        </p:dataList>
+                        <p:dataList value="#{apuestaBean.apuestasEnCurso}" var="bet" type="unordered" itemType="none" paginator="true" rows="10" styleClass="paginated">
+                            <f:facet name="header">
+                                APUESTAS EN JUEGO
+                            </f:facet>
+                            <p:commandLink update=":form:betDetail" oncomplete="PF('betDialog').show()" title="Detalle Apuesta" style="margin-right:10px;">
+                                <f:setPropertyActionListener value="#{bet}" target="#{apuestaBean.apuestaSeleccionada}" />
+                                <h:outputText value="#{bet.eventoDeportivo.nombreEvento}, #{bet.participante.nombre} #{bet.participante.apellido}" />
+                            </p:commandLink>
+                            <h:outputText value="#{bet.eventoDeportivo.nombreEvento}, #{bet.participante.nombre} #{bet.participante.apellido}" style="display:inline-block"/>
+                        </p:dataList>
+                    </p:panelGrid>
+                    <p:tabView id="tabAdm" dynamic="true" cache="false" orientation="top" style="width: 800px; font-size: medium; tab-size: 10px; table-layout: fixed"> 
+                        <p:tab title="Inicio" id="tab1" > 
+                            <p:panel id="foodbet" header="FOODBET" footer="Detalles" style="margin-bottom:20px" >
+                                <h:panelGrid columns="2" cellpadding="10">
+                                    <p:graphicImage value="/images/logoFoodbet.png" width="130" height="170" />
+                                    <h:outputText value="FOODBET es una servicio de apuestas que brinda al usuario la posibilidad de interactuar con amigos y personas de todo el mundo, la apuesta consiste en un plato a la carta del menú de un restaurante seleccionado. 
+                                                  El perdedor de la apuesta recibirá la factura a cancelar, una vez haya sido cancelada se notificará al ganador para que reclame su premio. Bienvenido a FOODBET, el arte de comer apostando"/>
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:panel id="Reglas" header="TÉRMINOS Y CONDICIONES" footer="Reglamento" style="margin-bottom:20px; text-align: justify;" >
+                                <h:panelGrid columns="1" cellpadding="10">
+                                    <h:outputText value="A continuación se detallan los términos y condiciones para una amena participación el nuestro portal, léalas atentantemente."/>
+                                    <h:outputText value="- El usuario podrá crear una apuesta o participar en una creada por otro usuario hasta un día antes del evento deportivo"/>
+                                    <h:outputText value="- Una apuesta es concretada cuando esta tiene a dos participantes en juego"/>
+                                    <h:outputText value="- Una vez concretada una apuesta el usuario no la puede eliminar"/>
+                                    <h:outputText value="- Terminada la apuesta, y conociendo los resultados, el perdedor tiene un plazo de 15 días para cancelar la factura, pasado este tiempo el usuario será dado de baja"/>
+                                    <h:outputText value="- Una apuesta será eliminada si esta no fue concretada, esta podrá ser eliminada por el usuario o por el sistema, este lo hará automáticamente el día del evento."/>
+                                </h:panelGrid>
+                            </p:panel>
+                        </p:tab>
+                        <p:tab title="Apostar"> 
+
+                        </p:tab>
+                        <p:tab title="Apuestas">
+                            <p:panel id="plApuestas" header="Apuestas en Juego" footer="Apuestas que está jugando en este momento" style="margin-bottom:20px; text-align: justify;">
+                                <h:panelGrid columns="2" cellpadding="10" id="pngApuestas">
+                                    <p:graphicImage value="/images/logoFoodbet.png" />
+                                    <h:outputText value="Francis Ford Coppola's legendary continuation..." />
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:panel id="plApuestasGanadas" header="Apuestas Ganadas" footer="Detalle de apuestas ganadas" style="margin-bottom:20px; text-align: justify;">
+                                <h:panelGrid columns="2" cellpadding="10" id="pngApGanadas">
+                                    <p:graphicImage value="/images/logoFoodbet.png" />
+                                    <h:outputText value="Francis Ford Coppola's legendary continuation..." />
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:panel id="plApuestasPerdidas" header="Apuestas Perdidas" footer="Detalle de apuestas perdidas" style="margin-bottom:20px; text-align: justify;">
+                                <h:panelGrid columns="2" cellpadding="10" id="pngApPerdidas">
+                                    <p:graphicImage value="/images/logoFoodbet.png" />
+                                    <h:outputText value="Francis Ford Coppola's legendary continuation..." />
+                                </h:panelGrid>
+                            </p:panel>
+                        </p:tab>
+                    </p:tabView>
+                </p:panelGrid>
+                <p:dialog header="Evento Info" widgetVar="eventoDialog" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
+                    <p:outputPanel id="eventoDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty apuestaBean.eventoSeleccionado}" columnClasses="label,value">
+                            <f:facet name="header">
+                                DETALLE DEL EVENTO 
+                            </f:facet>
+
+                            <h:outputText value="Nombre:" />
+                            <h:outputText value="#{apuestaBean.eventoSeleccionado.nombreEvento}" />
+
+                            <h:outputText value="Fecha" />
+                            <h:outputText value="#{apuestaBean.eventoSeleccionado.fechaEvento}" />
+
+                            <h:outputText value="Deporte:" />
+                            <h:outputText value="#{apuestaBean.eventoSeleccionado.tipoDeporte.nombre}"/>
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+                <p:dialog header="Car Info" widgetVar="betDialog" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
+                    <p:outputPanel id="betDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty apuestaBean.apuestaSeleccionada}" columnClasses="label,value">
+                            <f:facet name="header">
+                                DETALLE DE LA APUESTA
+                            </f:facet>
+
+                            <h:outputText value="Evento:" />
+                            <h:outputText value="#{apuestaBean.apuestaSeleccionada.eventoDeportivo.nombreEvento}" />
+
+                            <h:outputText value="Participante" />
+                            <h:outputText value="#{apuestaBean.apuestaSeleccionada.participante.nombre} #{apuestaBean.apuestaSeleccionada.participante.apellido}" />
+
+                            <h:outputText value="Fecha:" />
+                            <h:outputText value="#{apuestaBean.apuestaSeleccionada.eventoDeportivo.fechaEvento}"/>
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
