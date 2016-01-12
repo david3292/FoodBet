@@ -10,6 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -31,6 +33,11 @@ public class EventoEquipo implements Serializable{
     
     @Column(name = "GANADOR", nullable = true)
     private Integer ganador;
+    
+    @JoinColumn(name = "COD_EQUIPO", referencedColumnName = "COD_EQUIPO", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Equipo equipo;
+    
 
     public EventoEquipo() {
     }
@@ -59,6 +66,14 @@ public class EventoEquipo implements Serializable{
         this.ganador = ganador;
     }
 
+    public Equipo getEquipo() {
+        return equipo;
+    }
+
+    public void setEquipo(Equipo equipo) {
+        this.equipo = equipo;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -83,7 +98,7 @@ public class EventoEquipo implements Serializable{
 
     @Override
     public String toString() {
-        return "EventoEquipo{" + "codEvento=" + codEvento + ", codEquipo=" + codEquipo + ", ganador=" + ganador + '}';
-    }
+        return "EventoEquipo{" + "codEvento=" + codEvento + ", codEquipo=" + codEquipo + ", ganador=" + ganador + ", equipo=" + equipo + '}';
+    }    
     
 }

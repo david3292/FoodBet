@@ -301,7 +301,11 @@ and open the template in the editor.
                         <p:dataTable id="evento" var="evento" value="#{eventoBean.eventos}" editable="true" style="margin-bottom:20px"
                                      widgetVar="eventosTable"
                                      emptyMessage="No se encontraron eventos"
-                                     filteredValue="#{eventoBean.eventosFiltered}">
+                                     filteredValue="#{eventoBean.eventosFiltered}"
+                                     paginator="true"
+                                     rows="10"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="10,15,20">
 
                             <f:facet name="header">
                                 <p:outputPanel>
@@ -339,7 +343,34 @@ and open the template in the editor.
                             <p:column style="width:32px">
                                 <p:rowEditor />
                             </p:column>
+                            <p:column style="width:32px;text-align: center">
+                                <p:commandButton update="@form" action="#{eventoBean.selectedEvento}" icon="ui-icon-search" title="View">
+                                    <f:setPropertyActionListener value="#{evento}" target="#{eventoBean.evento}" />
+                                </p:commandButton>
+                            </p:column>
                         </p:dataTable>
+                        <br></br>
+                        <p:panel header="Detalles: #{eventoBean.evento.nombreEvento}"
+                                 rendered="#{eventoBean.detail}">
+
+                            <p:pickList id="PickList" var="e" value="#{eventoBean.equipos}" 
+                                        itemValue="#{e}" itemLabel="#{e.nombre}" effect="bounce"
+                                        showSourceControls="false" showTargetControls="false" showCheckbox="true" responsive="true"
+                                        showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="equipoConverter">
+
+                                <f:facet name="sourceCaption">Disponibles</f:facet>
+                                <f:facet name="targetCaption">Participantes</f:facet>
+
+
+                                <p:column style="width:90%;text-align: left">
+                                    <h:outputText value="#{e.nombre}" />
+                                </p:column>
+                            </p:pickList>
+                            <p:commandButton id="btnAceptareventoDetail" value="Aceptar" actionListener="#{eventoBean.aceptarDetalles()}"
+                                             update="@form" icon="ui-icon-check"/>
+                            <p:commandButton id="btnCancelareventoDetail" value="Cancelar" actionListener="#{eventoBean.cancelarDetalles()}" 
+                                             immediate="true" update="@form" icon="ui-icon-closethick"/>
+                        </p:panel>
 
                     </p:tab>
 

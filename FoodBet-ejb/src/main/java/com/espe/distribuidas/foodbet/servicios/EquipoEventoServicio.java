@@ -32,6 +32,10 @@ public class EquipoEventoServicio {
         return this.eventEquipoDAO.findById(ee, false);
     }
     
+    public List<EventoEquipo> obtenerEventoEquipoPorC(EventoEquipo ee){
+        return this.eventEquipoDAO.find(ee);
+    }
+    
     public void ingresarEventoEquipo(EventoEquipo ee){
         this.eventEquipoDAO.insert(ee);
     }
@@ -39,4 +43,5 @@ public class EquipoEventoServicio {
     public void actualizatEventoEquipo(EventoEquipo ee){
         this.eventEquipoDAO.update(ee);
     }
+    
 }

@@ -5,20 +5,26 @@
  */
 package com.espe.distribuidas.foodbet.beans;
 
+import com.espe.distribuidas.foodbet.modelo.Equipo;
 import com.espe.distribuidas.foodbet.modelo.EventoDeportivo;
+import com.espe.distribuidas.foodbet.modelo.EventoEquipo;
 import com.espe.distribuidas.foodbet.modelo.TipoDeporte;
 import com.espe.distribuidas.foodbet.servicios.EquipoEventoServicio;
 import com.espe.distribuidas.foodbet.servicios.EquipoServicio;
 import com.espe.distribuidas.foodbet.servicios.EventoDeportivoServicio;
 import com.espe.distribuidas.foodbet.servicios.TipoDeporteServicio;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.model.DualListModel;
 
 /**
  *
@@ -26,8 +32,8 @@ import org.primefaces.event.RowEditEvent;
  */
 @ManagedBean
 @ViewScoped
-public class EventoBean implements Serializable{
-    
+public class EventoBean implements Serializable {
+
     @EJB
     private EventoDeportivoServicio eventService;
     private List<EventoDeportivo> eventos;
@@ -37,28 +43,35 @@ public class EventoBean implements Serializable{
     private String nombreEvento;
     private Date fechaEvento;
     private String descEvento;
-    
+
     @EJB
     private TipoDeporteServicio deporteService;
     private List<TipoDeporte> deportes;
-    
+
     @EJB
     private EquipoServicio equipoService;
-    
+    private List<Equipo> equiposDisponibles;
+    private List<Equipo> equiposParticipantes;
+    private DualListModel<Equipo> equipos;
+
     @EJB
     private EquipoEventoServicio eqEvService;
-    
+    private List<EventoEquipo> eventoEquipos;
+
+    private boolean detail;
+
     @PostConstruct
-    public void init(){
+    public void init() {
+        this.detail = false;
         this.eventos = this.eventService.obtenerEventDeportivos();
         this.deportes = this.deporteService.obtenerTiposDeporte();
     }
-    
-    public void nuevo(){
+
+    public void nuevo() {
         this.evento = new EventoDeportivo();
     }
-    
-    public void aceptar(){
+
+    public void aceptar() {
         this.evento.setCodDeporte(this.codDeporte);
         this.evento.setNombreEvento(this.nombreEvento);
         this.evento.setFechaEvento(this.fechaEvento);
@@ -68,25 +81,98 @@ public class EventoBean implements Serializable{
         this.reset();
         this.eventos = this.eventService.obtenerEventDeportivos();
     }
-    
-    public void cancelar(){
+
+    public void cancelar() {
         this.evento = null;
         this.reset();
     }
-    
-    public void reset(){
+
+    public void reset() {
         this.codDeporte = null;
         this.nombreEvento = null;
         this.fechaEvento = null;
         this.descEvento = null;
     }
-    
-    public void onRowEditEvento(RowEditEvent event){
-        
+
+    public void onRowEditEvento(RowEditEvent event) {
+
+    }
+
+    public void onRowCancelEvento(RowEditEvent event) {
+
+    }
+
+    public void selectedEvento() {
+        this.detail = true;
+        this.equiposDisponibles = null;
+        this.equiposParticipantes = null;
+        this.equipos = null;
+        this.equiposDisponibles = this.equipoService.obtenerTodosLosEquipos();
+        EventoEquipo ee = new EventoEquipo();
+        System.out.println("Datos del evento: " + this.evento.toString());
+        ee.setCodEvento(this.evento.getCodEvento());
+        System.out.println("Datos del eventoo: " + ee.toString());
+        this.eventoEquipos = this.eqEvService.obtenerEventoEquipoPorC(ee);
+
+        if (!this.eventoEquipos.isEmpty()) {
+            System.out.println("Entra a la senencia");
+            int i;
+            int j;
+            List<Equipo> auxEquipos = this.equipoService.obtenerTodosLosEquipos();
+            this.equiposParticipantes = new ArrayList<Equipo>();
+            for (i = 0; i < this.eventoEquipos.size(); i++) {
+                System.out.println("For i : " + i + "tamaño: " + this.eventoEquipos.size());
+                for (j = 0; j < auxEquipos.size(); j++) {
+                    System.out.println("For j : " + j + "tamaño: " + auxEquipos.size());
+                    System.out.println("en el for j: " + j);
+                    if ((int) this.eventoEquipos.get(i).getCodEquipo() == (int) auxEquipos.get(j).getCodEquipo()) {
+                        this.equiposParticipantes.add(auxEquipos.get(j));
+                        this.equiposDisponibles.remove(auxEquipos.get(j));
+                        System.out.println("Ingresa al segundo if j: " + j);
+
+                    }
+                }
+
+            }
+            System.out.println("finalizan los for");
+            this.equipos = new DualListModel<Equipo>(this.equiposDisponibles, this.equiposParticipantes);
+        } else {
+            System.out.println("No existen participantes en el evento");
+            this.equiposParticipantes = new ArrayList<Equipo>();
+            this.equipos = new DualListModel<Equipo>(this.equiposDisponibles, this.equiposParticipantes);
+        }
+        System.out.println("fin del metodo");
+    }
+
+    public void aceptarDetalles() {
+        this.equiposDisponibles = this.equipos.getSource();
+        System.out.println("prueba prueba disponible: "+this.equiposDisponibles);
+        this.equiposParticipantes = this.equipos.getTarget();
+        System.out.println("prueba prueba participando: "+this.equiposParticipantes);
+        if (this.eventoEquipos.isEmpty()) {
+            if (this.equiposParticipantes.isEmpty()) {
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.addMessage(null, new FacesMessage("Avertencia", "Cero participantes agregados"));
+            }else{
+                for (int i = 0;i<this.equiposParticipantes.size();i++) {
+                    Integer codEquipo = this.equiposParticipantes.get(i).getCodEquipo();
+                    EventoEquipo ee = new EventoEquipo();
+                    ee.setCodEvento(this.evento.getCodEvento());
+                    ee.setCodEquipo(codEquipo);
+                    ee.setGanador(0);
+                    System.out.println("ingresa");
+                    //this.eqEvService.ingresarEventoEquipo(ee);
+                }
+            }
+        }else{
+            System.out.println("tamaño disponible: "+this.equiposDisponibles.get(0).getNombre());
+            System.out.println("tamaño participando: "+this.equiposParticipantes);
+        }
+        this.detail = false;
     }
     
-    public void onRowCancelEvento(RowEditEvent event){
-        
+    public void cancelarDetalles(){
+        this.detail = false;
     }
 
     public Integer getCodDeporte() {
@@ -152,5 +238,45 @@ public class EventoBean implements Serializable{
     public void setEventosFiltered(List<EventoDeportivo> eventosFiltered) {
         this.eventosFiltered = eventosFiltered;
     }
-    
+
+    public List<Equipo> getEquiposDisponibles() {
+        return equiposDisponibles;
+    }
+
+    public void setEquiposDisponibles(List<Equipo> equiposDisponibles) {
+        this.equiposDisponibles = equiposDisponibles;
+    }
+
+    public List<Equipo> getEquiposParticipantes() {
+        return equiposParticipantes;
+    }
+
+    public void setEquiposParticipantes(List<Equipo> equiposParticipantes) {
+        this.equiposParticipantes = equiposParticipantes;
+    }
+
+    public List<EventoEquipo> getEventoEquipos() {
+        return eventoEquipos;
+    }
+
+    public void setEventoEquipos(List<EventoEquipo> eventoEquipos) {
+        this.eventoEquipos = eventoEquipos;
+    }
+
+    public DualListModel<Equipo> getEquipos() {
+        return equipos;
+    }
+
+    public void setEquipos(DualListModel<Equipo> equipos) {
+        this.equipos = equipos;
+    }
+
+    public boolean isDetail() {
+        return detail;
+    }
+
+    public void setDetail(boolean detail) {
+        this.detail = detail;
+    }
+
 }
