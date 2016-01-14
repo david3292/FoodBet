@@ -24,9 +24,9 @@ and open the template in the editor.
                             </f:facet>
                             <p:commandLink update=":form:eventoDetail" oncomplete="PF('eventoDialog').show()" title="Detalle Evento" style="margin-left: 0px">
                                 <f:setPropertyActionListener value="#{evento}" target="#{apuestaBean.eventoSeleccionado}" />
-                                <h:outputText value="#{evento.tipoDeporte.nombre}: #{evento.nombreEvento}, #{evento.fechaEvento}" />
+                                <h:outputText value="#{evento.tipoDeporte.nombre}: #{evento.nombreEvento}, #{evento.fechaEvento.toGMTString()}" />
                             </p:commandLink>
-                            <h:outputText value="#{evento.tipoDeporte.nombre}: #{evento.nombreEvento}, #{evento.fechaEvento}" style="display:inline-block"/>
+                            <h:outputText value="#{evento.tipoDeporte.nombre}: #{evento.descripcionEvento}" style="display:inline-block"/>
                         </p:dataList>
                         <p:dataList value="#{apuestaBean.apuestasEnCurso}" var="bet" type="unordered" itemType="none" paginator="true" rows="10" styleClass="paginated">
                             <f:facet name="header">
@@ -44,7 +44,7 @@ and open the template in the editor.
                             <p:panel id="foodbet" header="FOODBET" footer="Detalles" style="margin-bottom:20px" >
                                 <h:panelGrid columns="2" cellpadding="10">
                                     <p:graphicImage value="/images/logoFoodbet.png" width="130" height="170" />
-                                    <h:outputText value="FOODBET es una servicio de apuestas que brinda al usuario la posibilidad de interactuar con amigos y personas de todo el mundo, la apuesta consiste en un plato a la carta del menú de un restaurante seleccionado. 
+                                    <h:outputText value="FOODBET es una servicio de apuestas que brinda al usuario la posibilidad de interactuar con amigos y personas de todo el mundo, la apuesta consiste en un plato a la carta del menú de un apuestaaurante seleccionado. 
                                                   El perdedor de la apuesta recibirá la factura a cancelar, una vez haya sido cancelada se notificará al ganador para que reclame su premio. Bienvenido a FOODBET, el arte de comer apostando"/>
                                 </h:panelGrid>
                             </p:panel>
@@ -59,8 +59,44 @@ and open the template in the editor.
                                 </h:panelGrid>
                             </p:panel>
                         </p:tab>
-                        <p:tab title="Apostar"> 
+                        <p:tab title="Apostar">
+                            <p:outputPanel id="botonesA">
+                                <p:commandButton value="Nueva Apuesta" actionListener="#{apuestaBean.nuevo()}"  onclick="PF('dlgApuestaMenu').show();" />
+                                <p:commandButton value="Unirse a Apuesta" actionListener="#{apuestaBean.unirse()}" update=":form:apuestaMenuDetail" onclick="PF('dlgApuestaMenuUnirse').show();"/>
+                            </p:outputPanel>
 
+                            <p:dataTable id="tblApuestas" 
+                                         var="apuesta" value="#{apuestaBean.apuestasMenus}" 
+                                         selectionMode="single"
+                                         scrollable="true"
+                                         selection="#{apuestaBean.apuestaMenuSeleccionada}" 
+                                         rowKey="#{apuesta.codApuesta}">
+                                <f:facet name="header"> Apuestas en Juego </f:facet>
+                                <p:column headerText="Nombre Participante">
+                                    <h:outputText value="#{apuesta.apuesta.participante.nombre}  #{apuesta.apuesta.participante.apellido}" />
+                                </p:column>
+                                <p:column headerText="Nombre del evento">
+                                    <h:outputText value="#{apuesta.apuesta.eventoDeportivo.nombreEvento}" />
+                                </p:column>
+                                <p:column headerText="Nombre Restaurante">
+                                    <h:outputText value="#{apuesta.menu.restaurante.nombre}" />
+                                </p:column>
+                                <p:column headerText="Especialidad">
+                                    <h:outputText value="#{apuesta.menu.restaurante.especialidad}" />
+                                </p:column>
+                                <p:column headerText="Direccion Restaurante">
+                                    <h:outputText value="#{apuesta.menu.restaurante.direccion}" />
+                                </p:column>
+                                <p:column headerText="Nombre Menú">
+                                    <h:outputText value="#{apuesta.menu.nombre}" />
+                                </p:column>
+                                <p:column headerText="Precio">
+                                    <h:outputText value="#{apuesta.menu.precio}" />
+                                </p:column>
+                                <p:column headerText="Descripcion Menu">
+                                    <h:outputText value="#{apuesta.menu.descripcion}}" />
+                                </p:column>
+                            </p:dataTable>
                         </p:tab>
                         <p:tab title="Apuestas">
                             <p:panel id="plApuestas" header="Apuestas en Juego" footer="Apuestas que está jugando en este momento" style="margin-bottom:20px; text-align: justify;">
@@ -102,7 +138,7 @@ and open the template in the editor.
                         </p:panelGrid>
                     </p:outputPanel>
                 </p:dialog>
-                <p:dialog header="Car Info" widgetVar="betDialog" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
+                <p:dialog header="Apuesta Info" widgetVar="betDialog" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
                     <p:outputPanel id="betDetail" style="text-align:center;">
                         <p:panelGrid  columns="2" rendered="#{not empty apuestaBean.apuestaSeleccionada}" columnClasses="label,value">
                             <f:facet name="header">
@@ -120,6 +156,40 @@ and open the template in the editor.
                         </p:panelGrid>
                     </p:outputPanel>
                 </p:dialog>
+                <p:dialog header="Nueva Apuesta" widgetVar="dlgApuestaMenu" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
+                    <p:outputPanel id="apuestaMenuDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2">
+                            <f:facet name="header">
+                                DETALLE DE LA APUESTA
+                            </f:facet>
+
+                            <h:outputText value="Seleccione el evento:" />
+                            <p:selectOneMenu  value="#{apuestaBean.codigoEvento}" style="width:100%">
+                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItems value="#{apuestaBean.eventos}" var="ep" itemLabel="#{ep.nombreEvento}" 
+                                               itemValue="#{ep.codEvento}"/>
+                            </p:selectOneMenu>
+                            <h:outputText value="Seleccione el Restaurante" />
+                            <p:selectOneMenu  value="#{apuestaBean.codigoRestaurante}" style="width:100%">
+                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItems value="#{apuestaBean.restaurantes}" var="rest" itemLabel="#{rest.nombre}" 
+                                               itemValue="#{rest.codRestaurante}"/>
+                                <f:ajax listener="#{apuestaBean.cargarMenu()}"/>
+                            </p:selectOneMenu>
+                            <h:outputText value="Seleccione el Menu" />
+                            <p:selectOneMenu id='somMenu' value="#{apuestaBean.codigoMenu}" style="width:100%">
+                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItems value="#{apuestaBean.menus}" var="menu" itemLabel="#{menu.nombre} #{menu.precio}" 
+                                               itemValue="#{menu.codMenu}"/>
+                            </p:selectOneMenu>
+                            <h:outputText value="Seleccione la cantidad" />
+                            <h:inputText value="#{apuestaBean.cantidad}"/>
+                            <p:commandButton id="btnAceptarNuevo" value="Aceptar" action="#{apuestaBean.aceptar()}" onclick="dlgApuestaMenu.hide()"/>
+                            <p:commandButton id="btnCancelarNuevo" value="Cancelar" action="#{registroBean.cancelar()}" onclick="dlgApuestaMenu.hide()"/>
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+
             </h:form>
         </ui:define>
     </ui:composition>

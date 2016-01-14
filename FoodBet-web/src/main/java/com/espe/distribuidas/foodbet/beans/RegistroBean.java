@@ -86,7 +86,10 @@ public class RegistroBean implements Serializable {
 
     private void nuevoUsuario(ParticipanteApuesta participante) {
         Usuario user = new Usuario();
+        List<Rol> roles = rolServicio.obtenerTodosRoles();
         user.setUsuario(nickname);
+        user.setCodRol(roles.get(1).getCodRol());
+        user.setRol(roles.get(1));
         user.setClave(clave);
         user.setEstado(1);// estado 1 activo, 0 inactivo
         user.setParticipanteApuesta(participante);
