@@ -17,8 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -35,6 +37,7 @@ public class ApuestaReporteBean implements Serializable {
     private List<ApuestaMenu> apuestasPorPagar;
     private List<ApuestaMenu> apuestasTotales;
     private ApuestaMenu apuestaPagada;
+    private Apuesta apuestaPagada1;
 
     @EJB
     private ApuestaMenuServicio apuestaServicio;
@@ -44,7 +47,7 @@ public class ApuestaReporteBean implements Serializable {
 
     @EJB
     private ApuestaServicio apuestaPagadaServicio;
-    
+
     @PostConstruct
     public void init() {
         apuestasGanadas = new ArrayList<ApuestaMenu>();
@@ -74,11 +77,21 @@ public class ApuestaReporteBean implements Serializable {
 
     public void pagarApuesta() {
         Apuesta apuesta = new Apuesta();
-        apuesta = apuestaPagada.getApuesta();
-        apuesta.setPagoEstado("4");
-        apuestaPagadaServicio.actualizarApuesta(apuesta);
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.update("form");
+        if (apuestaPagada == null) {
+            mostrarMensaje(FacesMessage.SEVERITY_WARN, "Debe seleccionar una apuesta");
+        } else {
+            
+            apuesta = apuestaPagada.getApuesta();
+            apuesta.setPagoEstado("4");
+//            apuestaPagada1.setPagoEstado("4");
+            apuestaPagadaServicio.actualizarApuesta(apuesta);
+            mostrarMensaje(FacesMessage.SEVERITY_INFO, "La apuesta ha sido pagada");
+        }
+    }
+
+    public void mostrarMensaje(FacesMessage.Severity severityMessage, String mensaje) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(severityMessage, "Mensaje:", mensaje));
     }
 
     public List<ApuestaMenu> getApuestasGanadas() {
@@ -121,4 +134,13 @@ public class ApuestaReporteBean implements Serializable {
         this.apuestaPagada = apuestaPagada;
     }
 
+    public Apuesta getApuestaPagada1() {
+        return apuestaPagada1;
+    }
+
+    public void setApuestaPagada1(Apuesta apuestaPagada1) {
+        this.apuestaPagada1 = apuestaPagada1;
+    }
+
+    
 }

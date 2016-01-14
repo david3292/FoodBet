@@ -109,12 +109,13 @@ public class ApuestaBean extends BaseBean implements Serializable {
     public void ApuestasMenuAMostrarse() {
         List<ApuestaMenu> apmen = new ArrayList<ApuestaMenu>();
 
-        apmen = this.apuestaMenuService.obtenerApuestasMenus();
-        for (ApuestaMenu am : apmen) {
-            if (am.getApuesta().getIdParticipante2() == null && am.getApuesta().getIdParticipante2().equals("")) {
-                this.apuestasMenus.add(am);
-            }
-        }
+//        apmen = this.apuestaMenuService.obtenerApuestasMenus();
+//        for (ApuestaMenu am : apmen) {
+//            if (am.getApuesta().getIdParticipante2() == null && am.getApuesta().getIdParticipante2().equals("")) {
+//                this.apuestasMenus.add(am);
+//            }
+//        }
+        apuestasMenus = this.apuestaMenuService.obtenerApuestasMenus();
     }
 
     @Override

@@ -136,7 +136,7 @@ and open the template in the editor.
                                         <h:outputText value="#{apuestaPagar.menu.descripcion}}" />
                                     </p:column>
                                 </p:dataTable>
-                                <p:commandButton value="Pagar" actionListener="#{apuestaReporteBean.pagarApuesta()}"/>
+                                <p:commandButton value="Pagar" actionListener="#{apuestaReporteBean.pagarApuesta()}" update="@form"/>
                             </p:panel>
                             <p:panel id="plApuestasGanadas" header="Apuestas Ganadas" footer="Detalle de apuestas ganadas" style="margin-bottom:20px; text-align: justify;">
                                 <p:dataTable id="tblApuestasGanadas" 
