@@ -99,23 +99,118 @@ and open the template in the editor.
                             </p:dataTable>
                         </p:tab>
                         <p:tab title="Apuestas">
-                            <p:panel id="plApuestas" header="Apuestas en Juego" footer="Apuestas que está jugando en este momento" style="margin-bottom:20px; text-align: justify;">
-                                <h:panelGrid columns="2" cellpadding="10" id="pngApuestas">
-                                    <p:graphicImage value="/images/logoFoodbet.png" />
-                                    <h:outputText value="Francis Ford Coppola's legendary continuation..." />
-                                </h:panelGrid>
+                            <p:panel id="plApuestas" header="Apuestas por Pagar" footer="Apuestas que está pendiente el pago" style="margin-bottom:20px; text-align: justify;">
+                                <p:dataTable id="tblApuestasPorPagar" 
+                                             var="apuestaPagar" value="#{apuestaReporteBean.apuestasPorPagar}" 
+                                             selectionMode="single"
+                                             scrollable="true"
+                                             scrollWidth="680"
+                                             selection="#{apuestaReporteBean.apuestaPagada}" 
+                                             rowKey="#{apuestaPagar.codApuesta}">
+                                    <f:facet name="header"> Apuestas por Pagar </f:facet>
+                                    <p:column headerText="Creador de la Apuesta" >
+                                        <h:outputText value="#{apuestaPagar.apuesta.participante.nombre}  #{apuestaPagar.apuesta.participante.apellido}" />
+                                    </p:column>
+                                    <p:column headerText="Oponente de la Apuesta">
+                                        <h:outputText value="#{apuestaPagar.apuesta.participante2.nombre}  #{apuestaPagar.apuesta.participante2.apellido}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre del evento">
+                                        <h:outputText value="#{apuestaPagar.apuesta.eventoDeportivo.nombreEvento}"/>
+                                    </p:column>
+                                    <p:column headerText="Nombre Restaurante">
+                                        <h:outputText value="#{apuestaPagar.menu.restaurante.nombre}" />
+                                    </p:column>
+                                    <p:column headerText="Especialidad">
+                                        <h:outputText value="#{apuestaPagar.menu.restaurante.especialidad}" />
+                                    </p:column>
+                                    <p:column headerText="Direccion Restaurante">
+                                        <h:outputText value="#{apuestaPagar.menu.restaurante.direccion}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre Menú">
+                                        <h:outputText value="#{apuestaPagar.menu.nombre}" />
+                                    </p:column>
+                                    <p:column headerText="Precio">
+                                        <h:outputText value="#{apuestaPagar.menu.precio}" />
+                                    </p:column>
+                                    <p:column headerText="Descripcion Menu">
+                                        <h:outputText value="#{apuestaPagar.menu.descripcion}}" />
+                                    </p:column>
+                                </p:dataTable>
+                                <p:commandButton value="Pagar" actionListener="#{apuestaReporteBean.pagarApuesta()}"/>
                             </p:panel>
                             <p:panel id="plApuestasGanadas" header="Apuestas Ganadas" footer="Detalle de apuestas ganadas" style="margin-bottom:20px; text-align: justify;">
-                                <h:panelGrid columns="2" cellpadding="10" id="pngApGanadas">
-                                    <p:graphicImage value="/images/logoFoodbet.png" />
-                                    <h:outputText value="Francis Ford Coppola's legendary continuation..." />
-                                </h:panelGrid>
+                                <p:dataTable id="tblApuestasGanadas" 
+                                             var="apuestaGanada" value="#{apuestaReporteBean.apuestasGanadas}" 
+                                             selectionMode="single"
+                                             scrollable="true"
+                                             scrollWidth="680"
+                                             selection="#{apuestaReporteBean.apuestaPagada}" 
+                                             rowKey="#{apuestaGanada.codApuesta}">
+                                    <p:column headerText="Creador de la Apuesta" >
+                                        <h:outputText value="#{apuestaGanada.apuesta.participante.nombre}  #{apuestaGanada.apuesta.participante.apellido}" />
+                                    </p:column>
+                                    <p:column headerText="Oponente de la Apuesta">
+                                        <h:outputText value="#{apuestaGanada.apuesta.participante2.nombre}  #{apuestaGanada.apuesta.participante2.apellido}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre del evento">
+                                        <h:outputText value="#{apuestaGanada.apuesta.eventoDeportivo.nombreEvento}"/>
+                                    </p:column>
+                                    <p:column headerText="Nombre Restaurante">
+                                        <h:outputText value="#{apuestaGanada.menu.restaurante.nombre}" />
+                                    </p:column>
+                                    <p:column headerText="Especialidad">
+                                        <h:outputText value="#{apuestaGanada.menu.restaurante.especialidad}" />
+                                    </p:column>
+                                    <p:column headerText="Direccion Restaurante">
+                                        <h:outputText value="#{apuestaGanada.menu.restaurante.direccion}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre Menú">
+                                        <h:outputText value="#{apuestaGanada.menu.nombre}" />
+                                    </p:column>
+                                    <p:column headerText="Precio">
+                                        <h:outputText value="#{apuestaGanada.menu.precio}" />
+                                    </p:column>
+                                    <p:column headerText="Descripcion Menu">
+                                        <h:outputText value="#{apuestaGanada.menu.descripcion}}" />
+                                    </p:column>
+                                </p:dataTable>
                             </p:panel>
                             <p:panel id="plApuestasPerdidas" header="Apuestas Perdidas" footer="Detalle de apuestas perdidas" style="margin-bottom:20px; text-align: justify;">
-                                <h:panelGrid columns="2" cellpadding="10" id="pngApPerdidas">
-                                    <p:graphicImage value="/images/logoFoodbet.png" />
-                                    <h:outputText value="Francis Ford Coppola's legendary continuation..." />
-                                </h:panelGrid>
+                                <p:dataTable id="tblApuestasPerdidas" 
+                                             var="apuestaPerdida" value="#{apuestaReporteBean.apuestasPerdidas}" 
+                                             selectionMode="single"
+                                             scrollable="true"
+                                             scrollWidth="680"
+                                             selection="#{apuestaReporteBean.apuestaPagada}" 
+                                             rowKey="#{apuestaPerdida.codApuesta}">
+                                    <p:column headerText="Creador de la Apuesta" >
+                                        <h:outputText value="#{apuestaPerdida.apuesta.participante.nombre}  #{apuestaPerdida.apuesta.participante.apellido}" />
+                                    </p:column>
+                                    <p:column headerText="Oponente de la Apuesta">
+                                        <h:outputText value="#{apuestaPerdida.apuesta.participante2.nombre}  #{apuestaPerdida.apuesta.participante2.apellido}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre del evento">
+                                        <h:outputText value="#{apuestaPerdida.apuesta.eventoDeportivo.nombreEvento}"/>
+                                    </p:column>
+                                    <p:column headerText="Nombre Restaurante">
+                                        <h:outputText value="#{apuestaPerdida.menu.restaurante.nombre}" />
+                                    </p:column>
+                                    <p:column headerText="Especialidad">
+                                        <h:outputText value="#{apuestaPerdida.menu.restaurante.especialidad}" />
+                                    </p:column>
+                                    <p:column headerText="Direccion Restaurante">
+                                        <h:outputText value="#{apuestaPerdida.menu.restaurante.direccion}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre Menú">
+                                        <h:outputText value="#{apuestaPerdida.menu.nombre}" />
+                                    </p:column>
+                                    <p:column headerText="Precio">
+                                        <h:outputText value="#{apuestaPerdida.menu.precio}" />
+                                    </p:column>
+                                    <p:column headerText="Descripcion Menu">
+                                        <h:outputText value="#{apuestaPerdida.menu.descripcion}}" />
+                                    </p:column>
+                                </p:dataTable>
                             </p:panel>
                         </p:tab>
                     </p:tabView>
@@ -211,7 +306,7 @@ and open the template in the editor.
 
                             <h:outputText value="Menu:" />
                             <h:outputText value="#{apuestaBean.apuestaMenu.menu.nombre}"/>
-                            
+
                             <h:outputText value="Equipos a Elegir:" />
                             <p:selectOneMenu id='somEquipoOponente' value="#{apuestaBean.codigoEquipoOponente}" style="width:100%">
                                 <f:selectItem itemLabel="Select One" itemValue="" />
