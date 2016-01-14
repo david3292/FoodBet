@@ -66,7 +66,7 @@ public class ApuestaBean extends BaseBean implements Serializable {
     private String codigoMenu;
     private List<Equipo> equipos;
     private String codigoEquipoOponente;
-    private Equipo equipoOponente1;
+    private List<Equipo> equiposOponente;
     private String codigoEquipo;
 
     @EJB
@@ -97,12 +97,24 @@ public class ApuestaBean extends BaseBean implements Serializable {
     public void init() {
         this.eventos = new ArrayList<EventoDeportivo>();
         this.eventos = this.eventoService.obtenerEventDeportivos();
+        this.apuestasEnCurso = this.apuestaService.obtenerTodasLasApuestas();
         this.apuestasMenus = new ArrayList<ApuestaMenu>();
-        this.apuestasMenus = this.apuestaMenuService.obtenerApuestasMenus();
+        ApuestasMenuAMostrarse();
         this.restaurantes = new ArrayList<Restaurante>();
         this.restaurantes = this.restauranteServicio.obtenerTodosRestaurantes();
         this.menus = new ArrayList<Menu>();
         this.equipos = new ArrayList<Equipo>();
+    }
+
+    public void ApuestasMenuAMostrarse() {
+        List<ApuestaMenu> apmen = new ArrayList<ApuestaMenu>();
+
+        apmen = this.apuestaMenuService.obtenerApuestasMenus();
+        for (ApuestaMenu am : apmen) {
+            if (am.getApuesta().getIdParticipante2() == null && am.getApuesta().getIdParticipante2().equals("")) {
+                this.apuestasMenus.add(am);
+            }
+        }
     }
 
     @Override
@@ -118,8 +130,16 @@ public class ApuestaBean extends BaseBean implements Serializable {
         this.apuestaMenu = new ApuestaMenu();
         try {
             BeanUtils.copyProperties(this.apuestaMenu, this.apuestaMenuSeleccionada);
+            List<EventoEquipo> eventoEquipo = new ArrayList<EventoEquipo>();
+            eventoEquipo = apuestaMenu.getApuesta().getEventoDeportivo().getEventoEquipos();
+            equiposOponente = new ArrayList<Equipo>();
+            for (EventoEquipo ee : eventoEquipo) {
+                if (ee.getCodEquipo() != apuestaMenu.getApuesta().getCodEquipo1()) {
+                    equiposOponente.add(ee.getEquipo());
+                }
+            }
             RequestContext context = RequestContext.getCurrentInstance();
-            context.update(":form:apuestaMenuDetail");
+            context.update("form:unirseDetail");
         } catch (IllegalAccessException ex) {
             Logger.getLogger(ApuestaBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvocationTargetException ex) {
@@ -140,17 +160,17 @@ public class ApuestaBean extends BaseBean implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("form:somMenu");
     }
-    
-    public void cargarEquipos(){
+
+    public void cargarEquipos() {
         List<EventoEquipo> eventoEquipo = new ArrayList<EventoEquipo>();
         eventoSeleccionado = eventoService.obtenerEventDepPorID(Integer.parseInt(codigoEvento));
         eventoEquipo = eventoSeleccionado.getEventoEquipos();
-        for (EventoEquipo ee:eventoEquipo){
-                this.equipos.add(ee.getEquipo()); 
+        for (EventoEquipo ee : eventoEquipo) {
+            this.equipos.add(ee.getEquipo());
         }
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("form:somEquipo");
-        
+
     }
 
     public void onItemSelectEvento(org.primefaces.event.ItemSelectEvent event) {
@@ -174,8 +194,6 @@ public class ApuestaBean extends BaseBean implements Serializable {
         } else {
             try {
                 //Llamar a modificar no a crear
-                List<EventoEquipo> eventoEquipo = new ArrayList<EventoEquipo>();
-                eventoEquipo = eventoSeleccionado.getEventoEquipos();
                 Apuesta apuestaOpononete = new Apuesta();
                 Usuario usuarioApuesta = new Usuario();
                 ManejoSesion sesion = new ManejoSesion();
@@ -184,8 +202,9 @@ public class ApuestaBean extends BaseBean implements Serializable {
                 usuarioApuesta = usuarioService.obtenerUsuarioPorID(sesion.Usuario());
                 apuestaOpononete.setParticipante2(usuarioApuesta.getParticipanteApuesta());
                 apuestaOpononete.setIdParticipante2(usuarioApuesta.getParticipanteApuesta().getIdParticipante());
-                this.apuestaMenuService.actualizarApuestaMenu(apuestaMenu);
-                mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Se ha unido a la apuesta ");
+                apuestaOpononete.setCodEquipo2(Integer.parseInt(codigoEquipoOponente));
+                this.apuestaService.actualizarApuesta(apuestaOpononete);
+                mostrarMensaje(FacesMessage.SEVERITY_INFO, "Se ha unido a la apuesta ");
             } catch (Exception e) {
                 mostrarMensaje(FacesMessage.SEVERITY_ERROR, "No puede unirse a la apuesta " + e);
             }
@@ -201,7 +220,7 @@ public class ApuestaBean extends BaseBean implements Serializable {
         Usuario usuarioApuesta = new Usuario();
         ManejoSesion sesion = new ManejoSesion();
         List<Apuesta> apuestaIngresada = new ArrayList<Apuesta>();
-        
+
         usuarioApuesta = usuarioService.obtenerUsuarioPorID(sesion.Usuario());
         eventoSeleccionado = eventoService.obtenerEventDepPorID(Integer.parseInt(codigoEvento));
         apuestaNueva.setParticipante(usuarioApuesta.getParticipanteApuesta());
@@ -221,7 +240,11 @@ public class ApuestaBean extends BaseBean implements Serializable {
             am.setMenu(menuSeleccionado);
             am.setCodMenu(menuSeleccionado.getCodMenu());
             am.setCantidad(Integer.parseInt(cantidad));
-            apuestaMenuService.ingresarApuestaMenu(am);
+            try {
+                apuestaMenuService.ingresarApuestaMenu(am);
+            } catch (Exception e) {
+                apuestaService.eliminarApuesta(apuestaIngresada.get(0).getCodApuesta());
+            }
         }
 
     }
@@ -423,12 +446,12 @@ public class ApuestaBean extends BaseBean implements Serializable {
         this.codigoEquipo = codigoEquipo;
     }
 
-    public Equipo getEquipoOponente1() {
-        return equipoOponente1;
+    public List<Equipo> getEquiposOponente() {
+        return equiposOponente;
     }
 
-    public void setEquipoOponente1(Equipo equipoOponente1) {
-        this.equipoOponente1 = equipoOponente1;
+    public void setEquiposOponente(List<Equipo> equiposOponente) {
+        this.equiposOponente = equiposOponente;
     }
 
     public String getCodigoEquipoOponente() {

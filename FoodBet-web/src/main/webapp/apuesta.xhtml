@@ -62,7 +62,7 @@ and open the template in the editor.
                         <p:tab title="Apostar">
                             <p:outputPanel id="botonesA">
                                 <p:commandButton value="Nueva Apuesta" actionListener="#{apuestaBean.nuevo()}"  onclick="PF('dlgApuestaMenu').show();" />
-                                <p:commandButton value="Unirse a Apuesta" actionListener="#{apuestaBean.unirse()}" update=":form:apuestaMenuDetail" onclick="PF('dlgApuestaMenuUnirse').show();"/>
+                                <p:commandButton value="Unirse a Apuesta" actionListener="#{apuestaBean.unirse()}" update=":form:unirseDetail" onclick="PF('UniseDialog').show();"/>
                             </p:outputPanel>
 
                             <p:dataTable id="tblApuestas" 
@@ -193,6 +193,32 @@ and open the template in the editor.
                             <h:inputText value="#{apuestaBean.cantidad}"/>
                             <p:commandButton id="btnAceptarNuevo" value="Aceptar" action="#{apuestaBean.aceptar()}" onclick="dlgApuestaMenu.hide()"/>
                             <p:commandButton id="btnCancelarNuevo" value="Cancelar" action="#{registroBean.cancelar()}" onclick="dlgApuestaMenu.hide()"/>
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+                <p:dialog header="Unirse a una apuesta" widgetVar="UniseDialog" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
+                    <p:outputPanel id="unirseDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2">
+                            <f:facet name="header">
+                                DETALLE DE LA APUESTA
+                            </f:facet>
+
+                            <h:outputText value="Nombre Participante:" />
+                            <h:outputText value="#{apuestaBean.apuestaMenu.apuesta.participante.nombre}" />
+
+                            <h:outputText value="Evento:" />
+                            <h:outputText value="#{apuestaBean.apuestaMenu.apuesta.eventoDeportivo.nombreEvento}" />
+
+                            <h:outputText value="Menu:" />
+                            <h:outputText value="#{apuestaBean.apuestaMenu.menu.nombre}"/>
+                            
+                            <h:outputText value="Equipos a Elegir:" />
+                            <p:selectOneMenu id='somEquipoOponente' value="#{apuestaBean.codigoEquipoOponente}" style="width:100%">
+                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItems value="#{apuestaBean.equiposOponente}" var="team" itemLabel="#{team.nombre}" 
+                                               itemValue="#{team.codEquipo}"/>
+                            </p:selectOneMenu>
+                            <p:commandButton id="btnAceptarUnirse" value="Aceptar" action="#{apuestaBean.aceptar()}" onclick="UniseDialog.hide()"/>
                         </p:panelGrid>
                     </p:outputPanel>
                 </p:dialog>
