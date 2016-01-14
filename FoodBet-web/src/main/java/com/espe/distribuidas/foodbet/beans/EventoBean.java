@@ -295,6 +295,8 @@ public class EventoBean implements Serializable {
         System.out.println("antes mail");
         this.enviarMails();
         System.out.println("despues mail");
+        
+        
     }
 
     public void enviarMails() {
@@ -309,13 +311,13 @@ public class EventoBean implements Serializable {
                 Mail m = new Mail();
                 m.setTo(a.getParticipante().getEmail());
                 m.setSubject("Ganador de la apuesta");
-                m.setSubject("Gracias por participar con nosotros");
+                m.setMessage("Gracias por participar con nosotros");
                 m.SEND();
 
                 m = new Mail();
                 m.setTo(a.getParticipante2().getEmail());
                 m.setSubject("Ha perdido la apuesta");
-                m.setSubject("Gracias por participar con nosotros");
+                m.setMessage("Gracias por participar con nosotros");
                 m.SEND();
             } else {
                 if (a.getCodEquipo2() == this.codGanador) {
