@@ -18,37 +18,41 @@ import javax.ejb.Stateless;
  *
  * @author david
  */
- @LocalBean
- @Stateless
+@LocalBean
+@Stateless
 public class ApuestaMenuServicio {
-     
-     @EJB
-     private ApuestaMenuDAO apuestaManuDAO;
-     
-     public List<ApuestaMenu> obtenerApuestasMenus(){
-         return this.apuestaManuDAO.findAll();
-     }
-     
-     public ApuestaMenu obtenerApuestaMenuPorID(ApuestaMenuPK am){
-         return this.apuestaManuDAO.findById(am, false);
-     }
-     
-     public void ingresarApuestaMenu(ApuestaMenu am){
-         this.apuestaManuDAO.insert(am);
-     }
-     
-     public void actualizarApuestaMenu(ApuestaMenu am){
-         System.out.println("Ingresa a la actualizacion");
-         this.apuestaManuDAO.update(am);
-     }
-     
-     public void eliminarApuestaMenu(ApuestaMenuPK codAM){
-         try {
-             ApuestaMenu ap = this.apuestaManuDAO.findById(codAM, false);
-             this.apuestaManuDAO.remove(ap);
-         } catch (Exception e) {
-             throw new ValidacionException("No se pudo eliminar el menu apostado");
-         }
-     }
-    
+
+    @EJB
+    private ApuestaMenuDAO apuestaManuDAO;
+
+    public List<ApuestaMenu> obtenerApuestasMenus() {
+        return this.apuestaManuDAO.findAll();
+    }
+
+    public ApuestaMenu obtenerApuestaMenuPorID(ApuestaMenuPK am) {
+        return this.apuestaManuDAO.findById(am, false);
+    }
+
+    public void ingresarApuestaMenu(ApuestaMenu am) {
+        this.apuestaManuDAO.insert(am);
+    }
+
+    public void actualizarApuestaMenu(ApuestaMenu am) {
+        System.out.println("Ingresa a la actualizacion");
+        try {
+            this.apuestaManuDAO.update(am);
+        } catch (Exception e) {
+            throw new ValidacionException("No se pudoa actualizar la apuesta menu "+e);
+        }
+    }
+
+    public void eliminarApuestaMenu(ApuestaMenuPK codAM) {
+        try {
+            ApuestaMenu ap = this.apuestaManuDAO.findById(codAM, false);
+            this.apuestaManuDAO.remove(ap);
+        } catch (Exception e) {
+            throw new ValidacionException("No se pudo eliminar el menu apostado");
+        }
+    }
+
 }
