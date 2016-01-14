@@ -65,7 +65,7 @@ public class EventoBean implements Serializable {
     private List<EventoEquipo> eventoEquipos;
 
     private boolean detail;
-    
+
     private Integer codGanador;
     private EventoEquipo ganador;
     private String nomGanador;
@@ -119,7 +119,7 @@ public class EventoBean implements Serializable {
         this.equiposParticipantes = null;
         this.equipos = null;
         this.equiposDisponibles = this.equipoService.obtenerTodosLosEquipos();
-        
+
         Team t = new Team();
         this.equiposEstatic = this.equipoService.obtenerTodosLosEquipos();
         t.setTeams(equiposEstatic);
@@ -130,7 +130,7 @@ public class EventoBean implements Serializable {
         this.eventoEquipos = this.eqEvService.obtenerEventoEquipoPorC(ee);
         this.selectGanador();
 
-        if (!this.eventoEquipos.isEmpty()) {            
+        if (!this.eventoEquipos.isEmpty()) {
             System.out.println("Entra a la senencia");
             int i;
             int j;
@@ -148,7 +148,7 @@ public class EventoBean implements Serializable {
 
                     }
                 }
-                if (this.eventoEquipos.get(i).getGanador()==1) {
+                if (this.eventoEquipos.get(i).getGanador() == 1) {
                     this.nomGanador = this.eventoEquipos.get(i).getEquipo().getNombre();
                     System.out.println("Ganador:----------------> " + this.nomGanador);
                 }
@@ -164,12 +164,15 @@ public class EventoBean implements Serializable {
         }
         System.out.println("fin del metodo");
     }
-    
-    private void selectGanador(){
+
+    private void selectGanador() {
         this.nomGanador = null;
-        for (EventoEquipo ee : this.eventoEquipos) {
-            if(ee.getGanador()==1){
-                this.nomGanador = ee.getEquipo().getNombre();
+        if (!this.eventoEquipos.isEmpty()) {
+
+            for (EventoEquipo ee : this.eventoEquipos) {
+                if (ee.getGanador() == 1) {
+                    this.nomGanador = ee.getEquipo().getNombre();
+                }
             }
         }
     }
@@ -177,7 +180,7 @@ public class EventoBean implements Serializable {
     public void aceptarDetalles() {
         System.out.println("entra al metodo Aceptar detalles");
         this.equiposDisponibles = this.equipos.getSource();
-        System.out.println("prueba prueba disponible: " + this.equiposDisponibles);        
+        System.out.println("prueba prueba disponible: " + this.equiposDisponibles);
         List<Equipo> disponibleP = this.equipos.getSource();
         System.out.println("prueba prueba disponible prueba: " + disponibleP);
         this.equiposParticipantes = this.equipos.getTarget();
@@ -212,7 +215,7 @@ public class EventoBean implements Serializable {
     private void listaAgregar() {
         int cont = 0;
         boolean agregar = false;
-        List<EventoEquipo> agregarEquipos = new ArrayList<EventoEquipo>();        
+        List<EventoEquipo> agregarEquipos = new ArrayList<EventoEquipo>();
         for (int i = 0; i < this.equiposParticipantes.size(); i++) {
             for (int j = 0; j < this.eventoEquipos.size(); j++) {
                 if ((this.equiposParticipantes.get(i).getCodEquipo() == this.eventoEquipos.get(j).getCodEquipo())) {
@@ -235,8 +238,11 @@ public class EventoBean implements Serializable {
             }
         }
         System.out.println("Lista para agregar: " + agregarEquipos);
+        for (EventoEquipo ee : agregarEquipos) {
+            this.eqEvService.ingresarEventoEquipo(ee);
+        }
     }
-    
+
     private void listaEliminar() {
         int cont = 0;
         boolean agregar = false;
@@ -259,6 +265,27 @@ public class EventoBean implements Serializable {
             }
         }
         System.out.println("Lista para eliminar: " + eliminarEquipos);
+        for (EventoEquipo ee : eliminarEquipos) {
+            this.eqEvService.eliminarEventoEquipo(ee);
+        }
+    }
+
+    public void aceptarGanador() {
+        System.out.println("evento: " + this.evento.getCodEvento());
+        System.out.println("ganador: " + this.codGanador);
+        this.eventoEquipos = this.eqEvService.obtenerTodosEventoEquipo();
+        System.out.println("Evento equipos: " + this.eventoEquipos);
+        for (EventoEquipo ee : this.eventoEquipos) {
+            System.out.println("ee codEquipo: " + this.codGanador);
+            System.out.println("ee codEvento: " + this.evento.getCodEvento());
+
+            if ((ee.getCodEquipo() == this.codGanador) && (ee.getCodEvento() == this.evento.getCodEvento())) {
+                ee.setGanador(1);
+                System.out.println("actualiza: " + ee);
+                this.eqEvService.actualizatEventoEquipo(ee);
+            }
+        }
+        this.eventos = this.eventService.obtenerEventDeportivos();
     }
 
     public void cancelarDetalles() {
@@ -392,7 +419,5 @@ public class EventoBean implements Serializable {
     public void setNomGanador(String nomGanador) {
         this.nomGanador = nomGanador;
     }
-    
-    
 
 }

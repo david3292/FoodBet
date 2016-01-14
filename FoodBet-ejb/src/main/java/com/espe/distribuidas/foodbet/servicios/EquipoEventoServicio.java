@@ -6,6 +6,7 @@
 package com.espe.distribuidas.foodbet.servicios;
 
 import com.espe.distribuidas.foodbet.dao.EventoEquipoDAO;
+import com.espe.distribuidas.foodbet.exceptions.ValidacionException;
 import com.espe.distribuidas.foodbet.modelo.EventoEquipo;
 import com.espe.distribuidas.foodbet.modelo.EventoEquipoPK;
 import java.util.List;
@@ -42,6 +43,14 @@ public class EquipoEventoServicio {
     
     public void actualizatEventoEquipo(EventoEquipo ee){
         this.eventEquipoDAO.update(ee);
+    }
+    
+    public void eliminarEventoEquipo(EventoEquipo ee){
+        try {
+            this.eventEquipoDAO.remove(ee);
+        } catch (Exception e) {
+            throw new ValidacionException("error al aeliminar EventoEquipo");
+        }
     }
     
 }

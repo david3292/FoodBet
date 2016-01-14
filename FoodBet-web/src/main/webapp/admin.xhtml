@@ -446,7 +446,7 @@ and open the template in the editor.
                             <p:column headerText="Id" filterBy="#{evento.codEvento}" filterMatchMode="exact">
                                 <p:cellEditor> 
                                     <f:facet  name="output"><h:outputText value="#{evento.codEvento}"/></f:facet>
-                                    <f:facet name="input"><p:inputText id="modelInput" value="#{eventoBean.codDeporte}" disabled="true" style="width:100%"/></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput" value="#{evento.codEvento}" disabled="true" style="width:100%"/></f:facet>
                                 </p:cellEditor>
                             </p:column>
 
@@ -457,10 +457,10 @@ and open the template in the editor.
                                 </p:cellEditor>
                             </p:column>
 
-                            <p:column headerText="Nombre" filterBy="#{evento.nombreEvento}" filterMatchMode="contains">
+                            <p:column headerText="Tipo" filterBy="#{evento.tipoDeporte.nombre}" filterMatchMode="contains">
                                 <p:cellEditor>
-                                    <f:facet name="output"><h:outputText value="#{evento.nombreEvento}" /></f:facet>
-                                    <f:facet name="input"><p:inputText value="#{evento.nombreEvento}" style="width:100%" label="Year"/></f:facet>
+                                    <f:facet name="output"><h:outputText value="#{evento.tipoDeporte.nombre}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{evento.tipoDeporte.nombre}" style="width:100%" disabled="true"/></f:facet>
                                 </p:cellEditor>
                             </p:column>
 
@@ -473,14 +473,14 @@ and open the template in the editor.
                                     <f:facet name="input"><p:calendar id="popup" value="#{evento.fechaEvento}" pattern="dd-MM-yyyy" /></f:facet>
                                 </p:cellEditor>
                             </p:column>
-                            
+
                             <p:column headerText="Ganador">
                                 <p:cellEditor>
-                                    <f:facet name="output"><h:outputText value="#{evento.nombreEvento}" /></f:facet>
-                                    <f:facet name="input"><p:inputText value="#{evento.nombreEvento}" style="width:100%" label="Year"/></f:facet>
+                                    <f:facet name="output"><h:outputText value="#{evento.ganador}" /></f:facet>
+                                    <f:facet name="input"><p:inputText style="width:100%" disabled="true" label="Year"/></f:facet>
                                 </p:cellEditor>
                             </p:column>
-                            
+
                             <p:column style="width:32px">
                                 <p:rowEditor />
                             </p:column>
@@ -512,18 +512,20 @@ and open the template in the editor.
                             <p:panel id="ganador"  style="width: max-content">
                                 <p:outputLabel value="Ganador"/>
                                 <p:selectOneMenu  value="#{eventoBean.codGanador}" style="width:100%">
-                                    
-                                    <f:selectItems value="#{eventoBean.eventoEquipos}" var="ep" itemLabel="#{ep.equipo.nombre}" 
-                                                   itemValue="#{ep.codEquipo}" noSelectionValue="#{eventoBean.nomGanador}"/>
+
+                                    <f:selectItems value="#{eventoBean.equiposParticipantes}" var="ep" itemLabel="#{ep.nombre}" 
+                                                   itemValue="#{ep.codEquipo}" noSelectionValue="#{evento.ganador}"/>
                                 </p:selectOneMenu>
-                                
+                                <p:commandButton id="aceptarGanador" value="Aceptar" action ="#{eventoBean.aceptarGanador()}"
+                                             update="@form" icon="ui-icon-check"/>
                             </p:panel>
+                            <p:commandButton id="btnAceptareventoDetail" value="Aceptar" action ="#{eventoBean.aceptarDetalles()}"
+                                             update="@form" icon="ui-icon-check"/>
+                            <p:commandButton id="btnCancelareventoDetail" value="Cancelar" actionListener="#{eventoBean.cancelarDetalles()}" 
+                                             immediate="true" update="@form" icon="ui-icon-closethick"/>
 
                         </p:panelGrid>
-                        <p:commandButton id="btnAceptareventoDetail" value="Aceptar" action ="#{eventoBean.aceptarDetalles()}"
-                                         update="@form" icon="ui-icon-check"/>
-                        <p:commandButton id="btnCancelareventoDetail" value="Cancelar" actionListener="#{eventoBean.cancelarDetalles()}" 
-                                         immediate="true" update="@form" icon="ui-icon-closethick"/>
+
 
                     </p:tab>
 

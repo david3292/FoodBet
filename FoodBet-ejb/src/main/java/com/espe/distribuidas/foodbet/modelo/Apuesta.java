@@ -52,24 +52,13 @@ public class Apuesta implements Serializable{
     @Column(name = "COD_EVENTO", nullable = false)
     private Integer codEvento;
     
-    @Column(name = "COD_GANADOR", nullable = true)
-    private Integer codGanador;
-    
-    @Column(name = "GANADOR", nullable = true)
-    private String ganador;
-    
-    @Column(name = "COD_GANADOR2", nullable = true)
-    private Integer codGanador2;
-    
-    @Column(name = "GANADOR2", nullable = true)
-    private String ganador2;
-    
     @Column(name = "GANADOR_APUESTA", nullable = true)
     private Integer ganadorApuesta;
     
     @Column(name = "PERDEDOR_APUESTA", nullable = true)
     private Integer perdedorApuesta;
     
+    @Column(name = "FECHA_PAGO", nullable = true)
     @Temporal(TemporalType.DATE)
     private Date fechaPago;
     
@@ -112,38 +101,6 @@ public class Apuesta implements Serializable{
 
     public void setEventoDeportivo(EventoDeportivo eventoDeportivo) {
         this.eventoDeportivo = eventoDeportivo;
-    }
-
-    public Integer getCodGanador() {
-        return codGanador;
-    }
-
-    public void setCodGanador(Integer codGanador) {
-        this.codGanador = codGanador;
-    }
-
-    public String getGanador() {
-        return ganador;
-    }
-
-    public void setGanador(String ganador) {
-        this.ganador = ganador;
-    }
-
-    public Integer getCodGanador2() {
-        return codGanador2;
-    }
-
-    public void setCodGanador2(Integer codGanador2) {
-        this.codGanador2 = codGanador2;
-    }
-
-    public String getGanador2() {
-        return ganador2;
-    }
-
-    public void setGanador2(String ganador2) {
-        this.ganador2 = ganador2;
     }
 
     public Integer getGanadorApuesta() {
@@ -235,7 +192,9 @@ public class Apuesta implements Serializable{
 
     @Override
     public String toString() {
-        return "Apuesta{" + "codApuesta=" + codApuesta + ", participante=" + participante + ", participante2=" + participante2 + ", eventoDeportivo=" + eventoDeportivo + ", codGanador=" + codGanador + ", ganador=" + ganador + ", codGanador2=" + codGanador2 + ", ganador2=" + ganador2 + ", ganadorApuesta=" + ganadorApuesta + ", perdedorApuesta=" + perdedorApuesta + ", fechaPago=" + fechaPago + ", pagoEstado=" + pagoEstado + '}';
+        return "Apuesta{" + "codApuesta=" + codApuesta + ", eventoDeportivo=" + eventoDeportivo + ", idParticipante=" + idParticipante + ", idParticipante2=" + idParticipante2 + ", codEvento=" + codEvento + ", ganadorApuesta=" + ganadorApuesta + ", perdedorApuesta=" + perdedorApuesta + ", fechaPago=" + fechaPago + ", pagoEstado=" + pagoEstado + '}';
     }
+
+    
         
 }

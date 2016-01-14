@@ -49,7 +49,7 @@ public class ApuestaServicio {
     
     public List<Apuesta> obtenerApuestaCodGanador(Integer c){
         Apuesta a = new Apuesta();
-        a.setCodGanador(c);
+        a.setGanadorApuesta(c);
         return this.apuestaDAO.find(a);
     }
     
