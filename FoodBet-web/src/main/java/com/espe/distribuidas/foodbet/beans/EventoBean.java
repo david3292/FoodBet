@@ -6,10 +6,13 @@
 package com.espe.distribuidas.foodbet.beans;
 
 import com.espe.distribuidas.foodbet.clases.Team;
+import com.espe.distribuidas.foodbet.mail.Mail;
+import com.espe.distribuidas.foodbet.modelo.Apuesta;
 import com.espe.distribuidas.foodbet.modelo.Equipo;
 import com.espe.distribuidas.foodbet.modelo.EventoDeportivo;
 import com.espe.distribuidas.foodbet.modelo.EventoEquipo;
 import com.espe.distribuidas.foodbet.modelo.TipoDeporte;
+import com.espe.distribuidas.foodbet.servicios.ApuestaServicio;
 import com.espe.distribuidas.foodbet.servicios.EquipoEventoServicio;
 import com.espe.distribuidas.foodbet.servicios.EquipoServicio;
 import com.espe.distribuidas.foodbet.servicios.EventoDeportivoServicio;
@@ -69,6 +72,9 @@ public class EventoBean implements Serializable {
     private Integer codGanador;
     private EventoEquipo ganador;
     private String nomGanador;
+
+    @EJB
+    private ApuestaServicio apuestaService;
 
     @PostConstruct
     public void init() {
@@ -286,6 +292,40 @@ public class EventoBean implements Serializable {
             }
         }
         this.eventos = this.eventService.obtenerEventDeportivos();
+    }
+
+    public void enviarMails() {
+        List<Apuesta> apuestas = this.apuestaService.obtenerApuestasPorEvento(this.evento.getCodEvento());
+
+        for (Apuesta a : apuestas) {
+            if (a.getCodEquipo1() == this.codGanador && a.getIdParticipante2() != null){
+                Mail m = new Mail();
+                m.setTo(a.getParticipante().getEmail());
+                m.setSubject("Ganador de la apuesta");
+                m.setSubject("Gracias por participar con nosotros");
+                m.SEND();
+
+                m = new Mail();
+                m.setTo(a.getParticipante2().getEmail());
+                m.setSubject("Ha perdido la apuesta");
+                m.setSubject("Gracias por participar con nosotros");
+                m.SEND();
+            } else {
+                if (a.getCodEquipo2() == this.codGanador) {
+                    Mail m = new Mail();
+                    m.setTo(a.getParticipante2().getEmail());
+                    m.setSubject("Ganador de la apuesta");
+                    m.setSubject("Gracias por participar con nosotros");
+                    m.SEND();
+
+                    m = new Mail();
+                    m.setTo(a.getParticipante().getEmail());
+                    m.setSubject("Ha perdido la apuesta");
+                    m.setSubject("Gracias por participar con nosotros");
+                    m.SEND();
+                }
+            }
+        }
     }
 
     public void cancelarDetalles() {

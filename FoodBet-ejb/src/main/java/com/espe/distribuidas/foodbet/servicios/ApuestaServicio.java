@@ -28,6 +28,12 @@ public class ApuestaServicio {
         return this.apuestaDAO.findAll();
     }
     
+    public List<Apuesta> obtenerApuestasPorEvento(Integer codE){
+        Apuesta a = new Apuesta();
+        a.setCodEvento(codE);
+        return this.apuestaDAO.find(a);
+    }
+    
     public Apuesta obteneApuestaPorID(Integer codApuesta){
         return this.apuestaDAO.findById(codApuesta, false);
     }
