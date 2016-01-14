@@ -100,8 +100,7 @@ and open the template in the editor.
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{user.rol.nombre}" /></f:facet>
                                     <f:facet name="input">
-                                        <p:selectOneMenu value="#{user.codRol}" style="width: max-content">
-                                            <f:selectItem itemLabel="No hay ganador" itemValue=""/>
+                                        <p:selectOneMenu value="#{user.codRol}" style="width: max-content">                                            
                                             <f:selectItems value="#{usuarioBean.roles}" var="rol" itemLabel="#{rol.nombre}" 
                                                            itemValue="#{rol.codRol}" noSelectionValue="#{user.rol.nombre}"/>
                                         </p:selectOneMenu>
@@ -474,6 +473,14 @@ and open the template in the editor.
                                     <f:facet name="input"><p:calendar id="popup" value="#{evento.fechaEvento}" pattern="dd-MM-yyyy" /></f:facet>
                                 </p:cellEditor>
                             </p:column>
+                            
+                            <p:column headerText="Ganador">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{evento.nombreEvento}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{evento.nombreEvento}" style="width:100%" label="Year"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            
                             <p:column style="width:32px">
                                 <p:rowEditor />
                             </p:column>
@@ -505,7 +512,7 @@ and open the template in the editor.
                             <p:panel id="ganador"  style="width: max-content">
                                 <p:outputLabel value="Ganador"/>
                                 <p:selectOneMenu  value="#{eventoBean.codGanador}" style="width:100%">
-                                    <f:selectItem itemLabel="Select One" itemValue="" />
+                                    
                                     <f:selectItems value="#{eventoBean.eventoEquipos}" var="ep" itemLabel="#{ep.equipo.nombre}" 
                                                    itemValue="#{ep.codEquipo}" noSelectionValue="#{eventoBean.nomGanador}"/>
                                 </p:selectOneMenu>

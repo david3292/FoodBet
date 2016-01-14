@@ -119,6 +119,7 @@ public class EventoBean implements Serializable {
         this.equiposParticipantes = null;
         this.equipos = null;
         this.equiposDisponibles = this.equipoService.obtenerTodosLosEquipos();
+        
         Team t = new Team();
         this.equiposEstatic = this.equipoService.obtenerTodosLosEquipos();
         t.setTeams(equiposEstatic);
@@ -127,6 +128,7 @@ public class EventoBean implements Serializable {
         ee.setCodEvento(this.evento.getCodEvento());
         System.out.println("Datos del eventoo: " + ee.toString());
         this.eventoEquipos = this.eqEvService.obtenerEventoEquipoPorC(ee);
+        this.selectGanador();
 
         if (!this.eventoEquipos.isEmpty()) {            
             System.out.println("Entra a la senencia");
@@ -148,6 +150,7 @@ public class EventoBean implements Serializable {
                 }
                 if (this.eventoEquipos.get(i).getGanador()==1) {
                     this.nomGanador = this.eventoEquipos.get(i).getEquipo().getNombre();
+                    System.out.println("Ganador:----------------> " + this.nomGanador);
                 }
 
             }
@@ -160,6 +163,15 @@ public class EventoBean implements Serializable {
             this.equipos = new DualListModel<Equipo>(this.equiposDisponibles, this.equiposParticipantes);
         }
         System.out.println("fin del metodo");
+    }
+    
+    private void selectGanador(){
+        this.nomGanador = null;
+        for (EventoEquipo ee : this.eventoEquipos) {
+            if(ee.getGanador()==1){
+                this.nomGanador = ee.getEquipo().getNombre();
+            }
+        }
     }
 
     public void aceptarDetalles() {

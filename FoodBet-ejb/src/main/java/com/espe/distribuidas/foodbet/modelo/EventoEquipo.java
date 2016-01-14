@@ -6,6 +6,7 @@
 package com.espe.distribuidas.foodbet.modelo;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -37,6 +38,10 @@ public class EventoEquipo implements Serializable{
     @JoinColumn(name = "COD_EQUIPO", referencedColumnName = "COD_EQUIPO", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Equipo equipo;
+    
+    @JoinColumn(name = "COD_EVENTO", referencedColumnName = "COD_EVENTO", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private EventoDeportivo eventoDeportivo;
     
 
     public EventoEquipo() {
@@ -72,6 +77,14 @@ public class EventoEquipo implements Serializable{
 
     public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
+    }
+
+    public EventoDeportivo getEventoDeportivo() {
+        return eventoDeportivo;
+    }
+
+    public void setEventoDeportivo(EventoDeportivo eventoDeportivo) {
+        this.eventoDeportivo = eventoDeportivo;
     }
 
     @Override

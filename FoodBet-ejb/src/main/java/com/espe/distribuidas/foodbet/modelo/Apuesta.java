@@ -43,6 +43,15 @@ public class Apuesta implements Serializable{
     @ManyToOne
     private EventoDeportivo eventoDeportivo;
     
+    @Column(name = "ID_PARTICIPANTE", nullable = false)
+    private Integer idParticipante;
+    
+    @Column(name = "ID_PARTICIPANTE2", nullable = true)
+    private Integer idParticipante2;
+    
+    @Column(name = "COD_EVENTO", nullable = false)
+    private Integer codEvento;
+    
     @Column(name = "COD_GANADOR", nullable = true)
     private Integer codGanador;
     
@@ -168,6 +177,39 @@ public class Apuesta implements Serializable{
     public void setPagoEstado(String pagoEstado) {
         this.pagoEstado = pagoEstado;
     }
+
+    public Integer getIdParticipante() {
+        return idParticipante;
+    }
+
+    public void setIdParticipante(Integer idParticipante) {
+        this.idParticipante = idParticipante;
+    }
+
+    public Integer getIdParticipante2() {
+        return idParticipante2;
+    }
+
+    public void setIdParticipante2(Integer idParticipante2) {
+        this.idParticipante2 = idParticipante2;
+    }
+
+    public Integer getCodEvento() {
+        return codEvento;
+    }
+
+    public void setCodEvento(Integer codEvento) {
+        this.codEvento = codEvento;
+    }
+
+    public List<ApuestaMenu> getMenusApuesta() {
+        return menusApuesta;
+    }
+
+    public void setMenusApuesta(List<ApuestaMenu> menusApuesta) {
+        this.menusApuesta = menusApuesta;
+    }
+        
 
     @Override
     public int hashCode() {

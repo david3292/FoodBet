@@ -40,6 +40,25 @@ public class ApuestaServicio {
         this.apuestaDAO.update(a);
     }
     
+    public List<Apuesta> obtenerApuestaPorParticipanteEvento(Integer p, Integer e){
+        Apuesta a = new Apuesta();
+        a.setIdParticipante(p);
+        a.setCodEvento(e);
+        return this.apuestaDAO.find(a);
+    }
+    
+    public List<Apuesta> obtenerApuestaCodGanador(Integer c){
+        Apuesta a = new Apuesta();
+        a.setCodGanador(c);
+        return this.apuestaDAO.find(a);
+    }
+    
+    public List<Apuesta> obtenerApuestaCodPerdedor(Integer c){
+        Apuesta a = new Apuesta();
+        a.setPerdedorApuesta(c);
+        return this.apuestaDAO.find(a);
+    }
+    
     public void eliminarApuesta(Integer codApuesta){
         try {
             Apuesta apuesta = this.apuestaDAO.findById(codApuesta, false);

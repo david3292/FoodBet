@@ -8,11 +8,14 @@ package com.espe.distribuidas.foodbet.modelo;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -45,6 +48,9 @@ public class EventoDeportivo implements Serializable{
     
     @Column(name = "DESCRIPCION_EVENTO", nullable = true)
     private String descripcionEvento;
+    
+    @OneToMany(fetch = FetchType.EAGER ,mappedBy = "eventoDeportivo")
+    private List<EventoEquipo> eventoEquipos;
 
     public Integer getCodEvento() {
         return codEvento;
@@ -97,6 +103,23 @@ public class EventoDeportivo implements Serializable{
     public String getFormatDate(){
         SimpleDateFormat f = new SimpleDateFormat("dd-MM-yy");
         return f.format(fechaEvento);
+    }
+
+    public List<EventoEquipo> getEventoEquipos() {
+        return eventoEquipos;
+    }
+
+    public void setEventoEquipos(List<EventoEquipo> eventoEquipos) {
+        this.eventoEquipos = eventoEquipos;
+    }
+    
+    public String getGanador(){
+        for(EventoEquipo ee : eventoEquipos){
+            if(ee.getGanador() == 1){
+                return ee.getEquipo().getNombre();
+            }
+        }
+        return null;
     }
 
     @Override
