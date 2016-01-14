@@ -36,6 +36,10 @@ public class SucursalServicio {
         this.sucursalDAO.insert(sucursal);
     }
     
+    public List<Sucursal> obtenerSucursalPorR(Sucursal s){
+        return this.sucursalDAO.find(s);
+    }
+    
     public void actualizarSucursal(Sucursal sucursal){
         this.sucursalDAO.update(sucursal);
     }

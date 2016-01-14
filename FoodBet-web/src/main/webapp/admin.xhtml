@@ -15,7 +15,7 @@ and open the template in the editor.
             <h:form id="form">
                 <p:growl id="growl" showDetail="true" life="3000"/> 
                 <p:messages id="msjError" showDetail="true" closable="true" autoUpdate="true"></p:messages>
-                <p:tabView id="tabAdm" dynamic="true" cache="false" orientation="left" style="width: 1140px">
+                <p:tabView id="tabAdm" dynamic="true" cache="false"  style="width: 1140px" onTabChange="">
 
                     <p:tab title="Roles">
 
@@ -100,7 +100,8 @@ and open the template in the editor.
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{user.rol.nombre}" /></f:facet>
                                     <f:facet name="input">
-                                        <p:selectOneMenu value="#{user.codRol}" style="width:100%">
+                                        <p:selectOneMenu value="#{user.codRol}" style="width: max-content">
+                                            <f:selectItem itemLabel="No hay ganador" itemValue=""/>
                                             <f:selectItems value="#{usuarioBean.roles}" var="rol" itemLabel="#{rol.nombre}" 
                                                            itemValue="#{rol.codRol}" noSelectionValue="#{user.rol.nombre}"/>
                                         </p:selectOneMenu>
@@ -146,7 +147,7 @@ and open the template in the editor.
                                      var="rest" value="#{restauranteBean.restaurantes}" 
                                      editable="true" 
                                      style="margin-bottom:20px"
-                                     widgetVar="eventosTableRestaurante"
+                                     widgetVar="restauranteTable"
                                      emptyMessage= "No se encontraron restaurantes"
                                      filteredValue="#{restauranteBean.restaurantesFiltered}"
                                      paginator="true"
@@ -157,14 +158,14 @@ and open the template in the editor.
                             <f:facet name="header"> Restaurantes 
                                 <p:outputPanel style="text-align: right">
                                     <h:outputText value="Buscar:" />
-                                    <p:inputText id="restFilter" onkeyup="PF('eventosTableRestaurante').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                    <p:inputText id="globalFilter" onkeyup="PF('restauranteTable').filter()" style="width:150px" placeholder="Enter keyword"/>
                                 </p:outputPanel>
                             </f:facet>
 
                             <p:ajax event="rowEdit" listener="#{restauranteBean.onRowEditRestaurante}" update=":form:growl" />
                             <p:ajax event="rowEditCancel" listener="#{restauranteBean.onRowCancelRestaurante}" update=":form:growl" />
 
-                            <p:column headerText="Nombre" style="text-align: left">
+                            <p:column headerText="Nombre" style="text-align: left" filterBy="#{rest.nombre}" filterMatchMode="contains">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{rest.nombre}" /></f:facet>
                                     <f:facet name="input"><p:inputText value="#{rest.nombre}" style="width:100%" label="Year"/></f:facet>
@@ -192,7 +193,7 @@ and open the template in the editor.
                                 </p:cellEditor>
                             </p:column>
 
-                            <p:column headerText="Especialidad" style="text-align: left">
+                            <p:column headerText="Especialidad" style="text-align: left" filterBy="#{rest.especialidad}" filterMatchMode="contains">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{rest.especialidad}" /></f:facet>
                                     <f:facet name="input"><p:inputText value="#{rest.especialidad}" style="width:100%" label="Year"/></f:facet>
@@ -212,32 +213,46 @@ and open the template in the editor.
                         <!--Tabla Sucursales-->
                         <p:outputPanel id="botonesS">
                             <p:commandButton value="Nuevo" actionListener="#{restauranteBean.nuevaSucursal()}"  
-                                             onclick = "PF('dlgSucursal').show();" icon="ui-icon-plus"/>
-                            <p:commandButton value="Actualizar" actionListener="#{restauranteBean.actualizarSucursal()}" update=":form:sucursalDetail" onclick="PF('dlgSucursal').show();"/>
+                                             onclick = "PF('dlgSucursal').show();" icon="ui-icon-plus"/>                            
                         </p:outputPanel>
+
                         <p:dataTable id="sucursales" 
-                                     var="sucursal" value="#{restauranteBean.restSelected.sucursales}" 
-                                     selectionMode="single" 
-                                     selection="#{restauranteBean.sucursalSelected}" 
-                                     rowKey="#{sucursal.codSucursal}">
-                            <f:facet name="header"> Sucursales </f:facet>
-                            <p:ajax event="rowSelect" listener="#{restauranteBean.onRowSucursalSelect}" update=":form:growl" />
-                            <p:ajax event="rowUnselect" listener="#{restauranteBean.onRowUnselect}" update=":form:growl" />
-                            <p:column headerText="Direccion">
+                                     var="sucursal" value="#{restauranteBean.sucursales}" 
+                                     editable="true" style="margin-bottom:20px"
+                                     widgetVar="sucursalesTable"
+                                     emptyMessage="No se encontraron sucursales"
+                                     filteredValue="#{restauranteBean.sucursalesFiltered}"
+                                     paginator="true"
+                                     rows="10"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="10,15,20">
+
+
+                            <f:facet name="header"> Sucursales 
+                                <p:outputPanel style="text-align: right">
+                                    <h:outputText value="Buscar:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('sucursalesTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                </p:outputPanel>
+                            </f:facet>                            
+
+                            <p:ajax event="rowEdit" listener="#{restauranteBean.onRowEditSucursal}" update=":form:growl" />
+                            <p:ajax event="rowEditCancel" listener="#{restauranteBean.onRowCancelSucursal}" update=":form:growl" />
+
+                            <p:column headerText="Direccion" style="text-align: left" filterBy="#{sucursal.direccion}" filterMatchMode="contains">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{sucursal.direccion}" /></f:facet>
                                     <f:facet name="input"><p:inputText value="#{sucursal.direccion}" style="width:100%" label="Year"/></f:facet>
                                 </p:cellEditor>
                             </p:column>
 
-                            <p:column headerText="Telefono1">
+                            <p:column headerText="Telefono1" style="text-align: left">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{sucursal.telefono1}" /></f:facet>
                                     <f:facet name="input"><p:inputText value="#{sucursal.telefono1}" style="width:100%" label="Year"/></f:facet>
                                 </p:cellEditor>
                             </p:column>
 
-                            <p:column headerText="Telefono2">
+                            <p:column headerText="Telefono2" style="text-align: left">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{sucursal.telefono2}" /></f:facet>
                                     <f:facet name="input"><p:inputText value="#{sucursal.telefono2}" style="width:100%" label="Year"/></f:facet>
@@ -249,37 +264,76 @@ and open the template in the editor.
                             </p:column>
 
                             <p:column style="width:32px;text-align: center">
-                                <p:commandButton action="#{rolBean.eliminar()}" icon="ui-icon-close"
+                                <p:commandButton action="#{restauranteBean.eliminarSucursal()}" icon="ui-icon-close"
                                                  style="border-style: none; background: none; icon: initial" 
-                                                 update=":form">
-                                    <f:setPropertyActionListener value="#{rol}" target="#{rolBean.rol}"/>
-                                    <p:confirm header="Confirmation" message="¿Seguro desea eliminar el rol?" icon="ui-icon-alert" />
+                                                 update="@form">
+                                    <f:setPropertyActionListener value="#{sucursal}" target="#{restauranteBean.sucursal}"/>
+                                    <p:confirm header="Confirmation" message="¿Seguro desea eliminar la sucursal?" icon="ui-icon-alert" />
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
 
                         <!--Tabla Menus-->
                         <p:outputPanel id="botonesM">
-                            <p:commandButton value="Nuevo" actionListener="#{restauranteBean.nuevoMenu()}"  onclick="PF('dlgMenu').show();" />
-                            <p:commandButton value="Actualizar" actionListener="#{restauranteBean.actualizarMenu()}" update=":form:menuDetail" onclick="PF('dlgMenu').show();"/>
+                            <p:commandButton value="Nuevo" actionListener="#{restauranteBean.nuevoMenu()}"  
+                                             onclick="PF('dlgMenu').show();" 
+                                             icon="ui-icon-plus"/>                           
                         </p:outputPanel>
+
                         <p:dataTable id="menus" 
-                                     var="menu" value="#{restauranteBean.restSelected.menus}" 
-                                     selectionMode="single" 
-                                     selection="#{restauranteBean.menuSelected}" 
-                                     rowKey="#{menu.codMenu}">
-                            <f:facet name="header"> Menus </f:facet>
-                            <p:ajax event="rowSelect" listener="#{restauranteBean.onRowMenuSelect}" update=":form:growl" />
-                            <p:ajax event="rowUnselect" listener="#{restauranteBean.onRowUnselect}" update=":form:growl" />
-                            <p:column headerText="Nombre">
-                                <h:outputText value="#{menu.nombre}" />
+                                     var="menu" value="#{restauranteBean.restSelected.menus}" style="margin-bottom:20px"
+                                     widgetVar="menusTable"
+                                     emptyMessage="No se encontraron menus"
+                                     filteredValue="#{restauranteBean.menusFiltered}"
+                                     paginator="true"
+                                     rows="10"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="10,15,20"> 
+
+                            <f:facet name="header"> Menus 
+                                <p:outputPanel style="text-align: right">
+                                    <h:outputText value="Buscar:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('menusTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <p:ajax event="rowEdit" listener="#{restauranteBean.onRowEditMenu}" update=":form:growl" />
+                            <p:ajax event="rowEditCancel" listener="#{restauranteBean.onRowCancelMenu(event)}" update=":form:growl" />
+
+                            <p:column headerText="Nombre">                                
+                                <p:cellEditor> 
+                                    <f:facet  name="output"><h:outputText value="#{menu.nombre}"/></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{menu.nombre}" style="width:100%" label="Year"/></f:facet>
+                                </p:cellEditor>
                             </p:column>
+
                             <p:column headerText="Precio">
-                                <h:outputText value="#{menu.precio}" />
+                                <p:cellEditor> 
+                                    <f:facet  name="output"><h:outputText value="#{menu.precio}"/></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{menu.precio}" style="width:100%" label="Year"/></f:facet>
+                                </p:cellEditor>
                             </p:column>
+
                             <p:column headerText="Descripcion">
-                                <h:outputText value="#{menu.descripcion}" />
-                            </p:column>                            
+                                <p:cellEditor> 
+                                    <f:facet  name="output"><h:outputText value="#{menu.descripcion}"/></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{menu.descripcion}" style="width:100%" label="Year"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>  
+
+                            <p:column style="width:32px">
+                                <p:rowEditor />
+                            </p:column>
+
+                            <p:column style="width:32px;text-align: center">
+                                <p:commandButton action="#{restauranteBean.eliminarMenu()}" icon="ui-icon-close"
+                                                 style="border-style: none; background: none; icon: initial" 
+                                                 update=":form">
+                                    <f:setPropertyActionListener value="#{menu}" target="#{restauranteBean.menuSelected}"/>
+                                    <p:confirm header="Confirmation" message="¿Seguro desea eliminar el menu?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                            </p:column>
+
                         </p:dataTable>
 
                     </p:tab>
@@ -287,7 +341,8 @@ and open the template in the editor.
                     <p:tab title="Deportes">
 
                         <p:outputPanel id="botonND">
-                            <p:commandButton value="Nuevo" actionListener="#{tipoDeporteBean.nuevo()}" icon="fa-plus-circle" onclick = "PF('dlgTipoDeporte').show();" />
+                            <p:commandButton value="Nuevo" actionListener="#{tipoDeporteBean.nuevo()}" 
+                                             icon="ui-icon-plus" onclick = "PF('dlgTipoDeporte').show();" />
                         </p:outputPanel>
 
                         <p:dataTable id="deportes" var="deporte" value="#{tipoDeporteBean.tipoDeportes}" editable="true" style="margin-bottom:20px">
@@ -329,7 +384,8 @@ and open the template in the editor.
                     <p:tab title="Equipo">
 
                         <p:outputPanel id="botonNE">
-                            <p:commandButton value="Nuevo" actionListener="#{equipoBean.nuevo()}" icon="fa-plus-circle" onclick = "PF('dlgEquipo').show();" />
+                            <p:commandButton value="Nuevo" actionListener="#{equipoBean.nuevo()}" 
+                                             icon="ui-icon-plus" onclick = "PF('dlgEquipo').show();" />
                         </p:outputPanel>
 
                         <p:dataTable id="equipo" var="equipo" value="#{equipoBean.equipos}" editable="true" style="margin-bottom:20px">
@@ -428,8 +484,9 @@ and open the template in the editor.
                             </p:column>
                         </p:dataTable>
                         <br></br>
-                        <p:panel header="Detalles: #{eventoBean.evento.nombreEvento}"
-                                 rendered="#{eventoBean.detail}">
+                        <p:panelGrid  id="pgrid" columns="2"
+                                      rendered="#{eventoBean.detail}"
+                                      style="width: max-content">
 
                             <p:pickList id="PickList" var="e" value="#{eventoBean.equipos}" 
                                         itemValue="#{e}" itemLabel="#{e.nombre}" effect="bounce"
@@ -444,11 +501,22 @@ and open the template in the editor.
                                     <h:outputText value="#{e.nombre}" />
                                 </p:column>
                             </p:pickList>
-                            <p:commandButton id="btnAceptareventoDetail" value="Aceptar" action ="#{eventoBean.aceptarDetalles()}"
-                                             update="@form" icon="ui-icon-check"/>
-                            <p:commandButton id="btnCancelareventoDetail" value="Cancelar" actionListener="#{eventoBean.cancelarDetalles()}" 
-                                             immediate="true" update="@form" icon="ui-icon-closethick"/>
-                        </p:panel>
+
+                            <p:panel id="ganador"  style="width: max-content">
+                                <p:outputLabel value="Ganador"/>
+                                <p:selectOneMenu  value="#{eventoBean.codGanador}" style="width:100%">
+                                    <f:selectItem itemLabel="Select One" itemValue="" />
+                                    <f:selectItems value="#{eventoBean.eventoEquipos}" var="ep" itemLabel="#{ep.equipo.nombre}" 
+                                                   itemValue="#{ep.codEquipo}" noSelectionValue="#{eventoBean.nomGanador}"/>
+                                </p:selectOneMenu>
+                                
+                            </p:panel>
+
+                        </p:panelGrid>
+                        <p:commandButton id="btnAceptareventoDetail" value="Aceptar" action ="#{eventoBean.aceptarDetalles()}"
+                                         update="@form" icon="ui-icon-check"/>
+                        <p:commandButton id="btnCancelareventoDetail" value="Cancelar" actionListener="#{eventoBean.cancelarDetalles()}" 
+                                         immediate="true" update="@form" icon="ui-icon-closethick"/>
 
                     </p:tab>
 

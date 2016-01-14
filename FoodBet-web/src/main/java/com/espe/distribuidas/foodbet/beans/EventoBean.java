@@ -65,6 +65,10 @@ public class EventoBean implements Serializable {
     private List<EventoEquipo> eventoEquipos;
 
     private boolean detail;
+    
+    private Integer codGanador;
+    private EventoEquipo ganador;
+    private String nomGanador;
 
     @PostConstruct
     public void init() {
@@ -109,7 +113,7 @@ public class EventoBean implements Serializable {
     }
 
     public void selectedEvento() {
-
+        this.nomGanador = null;
         this.detail = true;
         this.equiposDisponibles = null;
         this.equiposParticipantes = null;
@@ -124,7 +128,7 @@ public class EventoBean implements Serializable {
         System.out.println("Datos del eventoo: " + ee.toString());
         this.eventoEquipos = this.eqEvService.obtenerEventoEquipoPorC(ee);
 
-        if (!this.eventoEquipos.isEmpty()) {
+        if (!this.eventoEquipos.isEmpty()) {            
             System.out.println("Entra a la senencia");
             int i;
             int j;
@@ -142,11 +146,15 @@ public class EventoBean implements Serializable {
 
                     }
                 }
+                if (this.eventoEquipos.get(i).getGanador()==1) {
+                    this.nomGanador = this.eventoEquipos.get(i).getEquipo().getNombre();
+                }
 
             }
             System.out.println("finalizan los for");
             this.equipos = new DualListModel<Equipo>(this.equiposDisponibles, this.equiposParticipantes);
         } else {
+            this.nomGanador = null;
             System.out.println("No existen participantes en el evento");
             this.equiposParticipantes = new ArrayList<Equipo>();
             this.equipos = new DualListModel<Equipo>(this.equiposDisponibles, this.equiposParticipantes);
@@ -348,5 +356,31 @@ public class EventoBean implements Serializable {
     public void setDetail(boolean detail) {
         this.detail = detail;
     }
+
+    public Integer getCodGanador() {
+        return codGanador;
+    }
+
+    public void setCodGanador(Integer codGanador) {
+        this.codGanador = codGanador;
+    }
+
+    public EventoEquipo getGanador() {
+        return ganador;
+    }
+
+    public void setGanador(EventoEquipo ganador) {
+        this.ganador = ganador;
+    }
+
+    public String getNomGanador() {
+        return nomGanador;
+    }
+
+    public void setNomGanador(String nomGanador) {
+        this.nomGanador = nomGanador;
+    }
+    
+    
 
 }

@@ -62,6 +62,7 @@ public class UsuarioBean implements Serializable {
     }
     
     public void nuevo() {
+        this.roles = this.rolService.obtenerTodosRoles();
         this.reset();
         this.reset();
         System.out.println("crea un nuevo usuario");
@@ -79,6 +80,7 @@ public class UsuarioBean implements Serializable {
     }
     
     public void cancelar() {
+        this.roles = this.rolService.obtenerTodosRoles();
         this.user = null;
         this.reset();
     }
@@ -90,6 +92,7 @@ public class UsuarioBean implements Serializable {
     }
     
     public void onRowEditUser(RowEditEvent event) {
+        this.roles = this.rolService.obtenerTodosRoles();
         System.out.println("estado: " + this.estado);
         this.user = (Usuario) event.getObject();
         System.out.println("antes: " + this.user.toString());

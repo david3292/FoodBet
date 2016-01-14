@@ -32,6 +32,10 @@ public class MenuServicio {
         return this.menuDAO.findById(codMenu, false);
     }
     
+    public List<Menu> obtenerMenuPorR(Menu m){
+        return this.menuDAO.find(m);
+    }
+    
     public void ingresarMenu(Menu manu){
         this.menuDAO.insert(manu);
     }

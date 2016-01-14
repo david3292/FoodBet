@@ -123,8 +123,11 @@ public class RestauranteBean extends BaseBean implements Serializable {
         System.out.println("ingreso al metodo nuevaSucursal");
         this.enNuevoSucursal = true;
         this.sucursal = new Sucursal();
-        this.sucursal.setCodRestaurante(this.restSelected.getCodRestaurante());
+        this.sucursal.setCodRestaurante(this.restSelected.getCodRestaurante());        
         System.out.println("Sucursal: " + this.sucursal.getDireccion());
+        Sucursal s = new Sucursal();
+        s.setCodRestaurante(this.restSelected.getCodRestaurante());
+        this.sucursales = this.sucursalServicio.obtenerSucursalPorR(s);
         RequestContext context = RequestContext.getCurrentInstance();
         context.update(":form:sucursalDetail");
     }
@@ -206,23 +209,71 @@ public class RestauranteBean extends BaseBean implements Serializable {
         FacesMessage msg = new FacesMessage("Edición Cancelada", ((Restaurante)event.getObject()).getNombre());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
-    public void onRowSucursalSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage("Sucursal seleccionada", ((Sucursal) event.getObject()).getDireccion());
+    
+    public void onRowEditSucursal(RowEditEvent event){
+        this.sucursalSelected = ((Sucursal)event.getObject());
+        this.sucursalServicio.actualizarSucursal(this.sucursalSelected);
+        FacesMessage msg = new FacesMessage("Sucursal Modificada: ",this.sucursalSelected.getDireccion());
         FacesContext.getCurrentInstance().addMessage(null, msg);
-        System.out.println("Seleccion Sucursal: " + this.sucursalSelected.toString());
-        init();
+        Sucursal s = new Sucursal();
+        s.setCodRestaurante(this.restSelected.getCodRestaurante());
+        this.sucursales  = this.sucursalServicio.obtenerSucursalPorR(s);
+        this.restSelected.setSucursales(this.sucursales);
     }
     
-    public void onRowMenuSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage("Menu seleccionado", ((Menu) event.getObject()).getNombre());
+    public void onRowCancelSucursal(RowEditEvent event){
+        FacesMessage msg = new FacesMessage("Edición Cancelada", ((Sucursal)event.getObject()).getDireccion());
         FacesContext.getCurrentInstance().addMessage(null, msg);
-        init();
     }
-
-    public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage("Restaurante deseleccionado", ((Restaurante) event.getObject()).getNombre());
+    
+    public void onRowEditMenu(RowEditEvent event){
+        this.menuSelected = ((Menu)event.getObject());
+        this.menuServicio.actualizarMenu(this.menuSelected);
+        FacesMessage msg = new FacesMessage("Menu Modificado: ",this.menuSelected.getNombre());
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        Menu m = new Menu();
+        m.setCodRestaurante(this.restSelected.getCodRestaurante());
+        this.menus = this.menuServicio.obtenerMenuPorR(m);
+        this.restSelected.setMenus(this.menus);
+        
+        
+    }
+    
+    public void onRowCancelMenu(RowEditEvent event){
+        FacesMessage msg = new FacesMessage("Edición Cancelada", ((Menu)event.getObject()).getNombre());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    public void eliminarSucursal(){
+        try {
+            System.out.println("eliminar sucursal: " + this.sucursal);
+            this.sucursalServicio.eliminarSucursal(this.sucursal.getCodSucursal());
+            Sucursal s = new Sucursal();
+            s.setCodRestaurante(this.restSelected.getCodRestaurante());
+            this.sucursales = this.sucursalServicio.obtenerSucursalPorR(s);
+            this.restSelected.setSucursales(this.sucursales);
+            this.sucursal = null;
+        } catch (Exception e) {
+            FacesMessage msg = new FacesMessage("Error en la eliminacion", this.sucursal.getDireccion());
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            this.sucursal = null;
+        }
+    }    
+    
+    public void eliminarMenu(){
+        try {
+            System.out.println("eliminar menu: " + this.menu);
+            this.menuServicio.eliminarMenu(this.menu.getCodMenu());
+            Menu m = new Menu();
+            m.setCodRestaurante(this.restSelected.getCodRestaurante());
+            this.menus = this.menuServicio.obtenerMenuPorR(m);
+            this.restSelected.setMenus(this.menus);
+            this.menuSelected = null;
+        } catch (Exception e) {
+            FacesMessage msg = new FacesMessage("Error en la eliminacion", this.menu.getNombre());
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            this.menuSelected = null;
+        }
     }
 
     public void mostrarMensaje(FacesMessage.Severity severityMessage, String mensaje) {
@@ -231,7 +282,15 @@ public class RestauranteBean extends BaseBean implements Serializable {
     }
     
     public void restauranteSelect(){
-        this.sucursales = this.restSelected.getSucursales();
+        Sucursal s = new Sucursal();
+        s.setCodRestaurante(this.restSelected.getCodRestaurante());
+        this.sucursales = this.sucursalServicio.obtenerSucursalPorR(s);
+        this.restSelected.setSucursales(this.sucursales);
+        
+        Menu m = new Menu();
+        m.setCodRestaurante(this.restSelected.getCodRestaurante());
+        this.menus = this.menuServicio.obtenerMenuPorR(m);
+        this.restSelected.setMenus(this.menus);
     }
 
     @Override
@@ -298,6 +357,10 @@ public class RestauranteBean extends BaseBean implements Serializable {
             RequestContext context = RequestContext.getCurrentInstance();
             context.update(":form:sucursalDetail");
             System.out.println("Termina la funcion aceptarSucursal");
+            Sucursal s = new Sucursal();
+            s.setCodRestaurante(this.restSelected.getCodRestaurante());
+            this.sucursales = this.sucursalServicio.obtenerSucursalPorR(s);
+            this.restSelected.setSucursales(this.sucursales);
 
         } else {
             System.out.println("Funcion actualizar sucursal"+this.sucursal.toString());
@@ -321,6 +384,11 @@ public class RestauranteBean extends BaseBean implements Serializable {
             this.restSelected = this.restService.obtenerRestaurantePorID(this.restSelected.getCodRestaurante());
             RequestContext context = RequestContext.getCurrentInstance();
             context.update(":form:menuDetail");
+            
+            Menu m = new Menu();
+            m.setCodRestaurante(this.restSelected.getCodRestaurante());
+            this.menus = this.menuServicio.obtenerMenuPorR(m);
+            this.restSelected.setMenus(this.menus);
         }else{
             System.out.println("Funcion actualizar menu" + this.menu.toString());
             this.menu.setNombre(this.menuNombre);
