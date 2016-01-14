@@ -8,13 +8,16 @@ package com.espe.distribuidas.foodbet.beans;
 import com.espe.distribuidas.foodbet.clases.ManejoSesion;
 import com.espe.distribuidas.foodbet.modelo.Apuesta;
 import com.espe.distribuidas.foodbet.modelo.ApuestaMenu;
+import com.espe.distribuidas.foodbet.modelo.Equipo;
 import com.espe.distribuidas.foodbet.modelo.EventoDeportivo;
+import com.espe.distribuidas.foodbet.modelo.EventoEquipo;
 import com.espe.distribuidas.foodbet.modelo.Menu;
 import com.espe.distribuidas.foodbet.modelo.ParticipanteApuesta;
 import com.espe.distribuidas.foodbet.modelo.Restaurante;
 import com.espe.distribuidas.foodbet.modelo.Usuario;
 import com.espe.distribuidas.foodbet.servicios.ApuestaMenuServicio;
 import com.espe.distribuidas.foodbet.servicios.ApuestaServicio;
+import com.espe.distribuidas.foodbet.servicios.EquipoServicio;
 import com.espe.distribuidas.foodbet.servicios.EventoDeportivoServicio;
 import com.espe.distribuidas.foodbet.servicios.MenuServicio;
 import com.espe.distribuidas.foodbet.servicios.ParticipanteApuestaServicio;
@@ -61,6 +64,10 @@ public class ApuestaBean extends BaseBean implements Serializable {
     private List<Restaurante> restaurantes;
     private String codigoRestaurante;
     private String codigoMenu;
+    private List<Equipo> equipos;
+    private String codigoEquipoOponente;
+    private Equipo equipoOponente1;
+    private String codigoEquipo;
 
     @EJB
     private ApuestaServicio apuestaService;
@@ -83,6 +90,9 @@ public class ApuestaBean extends BaseBean implements Serializable {
     @EJB
     private RestauranteServicio restauranteServicio;
 
+    @EJB
+    private EquipoServicio equipoService;
+
     @PostConstruct
     public void init() {
         this.eventos = new ArrayList<EventoDeportivo>();
@@ -92,6 +102,7 @@ public class ApuestaBean extends BaseBean implements Serializable {
         this.restaurantes = new ArrayList<Restaurante>();
         this.restaurantes = this.restauranteServicio.obtenerTodosRestaurantes();
         this.menus = new ArrayList<Menu>();
+        this.equipos = new ArrayList<Equipo>();
     }
 
     @Override
@@ -129,6 +140,18 @@ public class ApuestaBean extends BaseBean implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("form:somMenu");
     }
+    
+    public void cargarEquipos(){
+        List<EventoEquipo> eventoEquipo = new ArrayList<EventoEquipo>();
+        eventoSeleccionado = eventoService.obtenerEventDepPorID(Integer.parseInt(codigoEvento));
+        eventoEquipo = eventoSeleccionado.getEventoEquipos();
+        for (EventoEquipo ee:eventoEquipo){
+                this.equipos.add(ee.getEquipo()); 
+        }
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("form:somEquipo");
+        
+    }
 
     public void onItemSelectEvento(org.primefaces.event.ItemSelectEvent event) {
         this.restauranteSeleccionado = this.restauranteServicio.obtenerRestaurantePorID(Integer.parseInt(codigoRestaurante));
@@ -151,6 +174,8 @@ public class ApuestaBean extends BaseBean implements Serializable {
         } else {
             try {
                 //Llamar a modificar no a crear
+                List<EventoEquipo> eventoEquipo = new ArrayList<EventoEquipo>();
+                eventoEquipo = eventoSeleccionado.getEventoEquipos();
                 Apuesta apuestaOpononete = new Apuesta();
                 Usuario usuarioApuesta = new Usuario();
                 ManejoSesion sesion = new ManejoSesion();
@@ -176,7 +201,7 @@ public class ApuestaBean extends BaseBean implements Serializable {
         Usuario usuarioApuesta = new Usuario();
         ManejoSesion sesion = new ManejoSesion();
         List<Apuesta> apuestaIngresada = new ArrayList<Apuesta>();
-
+        
         usuarioApuesta = usuarioService.obtenerUsuarioPorID(sesion.Usuario());
         eventoSeleccionado = eventoService.obtenerEventDepPorID(Integer.parseInt(codigoEvento));
         apuestaNueva.setParticipante(usuarioApuesta.getParticipanteApuesta());
@@ -184,6 +209,7 @@ public class ApuestaBean extends BaseBean implements Serializable {
         apuestaNueva.setEventoDeportivo(eventoSeleccionado);
         apuestaNueva.setCodEvento(eventoSeleccionado.getCodEvento());
         apuestaNueva.setPagoEstado("1");
+        apuestaNueva.setCodEquipo1(Integer.parseInt(codigoEquipo));
         apuestaService.ingresarApuesta(apuestaNueva);
         apuestaIngresada = apuestaService.obtenerApuestaPorParticipanteEvento(apuestaNueva.getIdParticipante(), apuestaNueva.getCodEvento());
         if (apuestaIngresada == null) {
@@ -379,6 +405,38 @@ public class ApuestaBean extends BaseBean implements Serializable {
 
     public void setCodigoMenu(String codigoMenu) {
         this.codigoMenu = codigoMenu;
+    }
+
+    public List<Equipo> getEquipos() {
+        return equipos;
+    }
+
+    public void setEquipos(List<Equipo> equipos) {
+        this.equipos = equipos;
+    }
+
+    public String getCodigoEquipo() {
+        return codigoEquipo;
+    }
+
+    public void setCodigoEquipo(String codigoEquipo) {
+        this.codigoEquipo = codigoEquipo;
+    }
+
+    public Equipo getEquipoOponente1() {
+        return equipoOponente1;
+    }
+
+    public void setEquipoOponente1(Equipo equipoOponente1) {
+        this.equipoOponente1 = equipoOponente1;
+    }
+
+    public String getCodigoEquipoOponente() {
+        return codigoEquipoOponente;
+    }
+
+    public void setCodigoEquipoOponente(String codigoEquipoOponente) {
+        this.codigoEquipoOponente = codigoEquipoOponente;
     }
 
 }

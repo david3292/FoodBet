@@ -168,6 +168,13 @@ and open the template in the editor.
                                 <f:selectItem itemLabel="Select One" itemValue="" />
                                 <f:selectItems value="#{apuestaBean.eventos}" var="ep" itemLabel="#{ep.nombreEvento}" 
                                                itemValue="#{ep.codEvento}"/>
+                                <f:ajax listener="#{apuestaBean.cargarEquipos()}"/>
+                            </p:selectOneMenu>
+                            <h:outputText value="Seleccione el equipo" />
+                            <p:selectOneMenu id='somEquipo' value="#{apuestaBean.codigoEquipo}" style="width:100%">
+                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItems value="#{apuestaBean.equipos}" var="team" itemLabel="#{team.nombre}" 
+                                               itemValue="#{team.codEquipo}"/>
                             </p:selectOneMenu>
                             <h:outputText value="Seleccione el Restaurante" />
                             <p:selectOneMenu  value="#{apuestaBean.codigoRestaurante}" style="width:100%">
@@ -176,7 +183,7 @@ and open the template in the editor.
                                                itemValue="#{rest.codRestaurante}"/>
                                 <f:ajax listener="#{apuestaBean.cargarMenu()}"/>
                             </p:selectOneMenu>
-                            <h:outputText value="Seleccione el Menu" />
+                            <h:outputText value="Seleccione el Menu"/>
                             <p:selectOneMenu id='somMenu' value="#{apuestaBean.codigoMenu}" style="width:100%">
                                 <f:selectItem itemLabel="Select One" itemValue="" />
                                 <f:selectItems value="#{apuestaBean.menus}" var="menu" itemLabel="#{menu.nombre} #{menu.precio}" 
