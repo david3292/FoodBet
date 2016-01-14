@@ -37,6 +37,10 @@ public class ApuestaMenu implements Serializable{
     @JoinColumn(name = "COD_APUESTA", referencedColumnName = "COD_APUESTA", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Apuesta apuesta;
+    
+    @JoinColumn(name = "COD_MENU", referencedColumnName = "COD_MENU", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Menu menu;
 
     public ApuestaMenu() {
     }
@@ -71,6 +75,14 @@ public class ApuestaMenu implements Serializable{
 
     public void setApuesta(Apuesta apuesta) {
         this.apuesta = apuesta;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
 
     @Override
