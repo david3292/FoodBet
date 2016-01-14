@@ -65,6 +65,12 @@ public class Apuesta implements Serializable{
     @Column(name = "PAGO_ESTADO", nullable = true)
     private String pagoEstado;
     
+    @Column(name = "COD_EQUIPOP1", nullable = true)
+    private Integer codEquipo1;
+    
+    @Column(name = "COD_EQUIPOP2", nullable = true)
+    private Integer codEquipo2;
+    
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "apuesta")
     List<ApuestaMenu> menusApuesta;
 
@@ -166,6 +172,22 @@ public class Apuesta implements Serializable{
     public void setMenusApuesta(List<ApuestaMenu> menusApuesta) {
         this.menusApuesta = menusApuesta;
     }
+
+    public Integer getCodEquipo1() {
+        return codEquipo1;
+    }
+
+    public void setCodEquipo1(Integer codEquipo1) {
+        this.codEquipo1 = codEquipo1;
+    }
+
+    public Integer getCodEquipo2() {
+        return codEquipo2;
+    }
+
+    public void setCodEquipo2(Integer codEquipo2) {
+        this.codEquipo2 = codEquipo2;
+    }        
         
 
     @Override
@@ -192,7 +214,7 @@ public class Apuesta implements Serializable{
 
     @Override
     public String toString() {
-        return "Apuesta{" + "codApuesta=" + codApuesta + ", eventoDeportivo=" + eventoDeportivo + ", idParticipante=" + idParticipante + ", idParticipante2=" + idParticipante2 + ", codEvento=" + codEvento + ", ganadorApuesta=" + ganadorApuesta + ", perdedorApuesta=" + perdedorApuesta + ", fechaPago=" + fechaPago + ", pagoEstado=" + pagoEstado + '}';
+        return "Apuesta{" + "codApuesta=" + codApuesta + ", participante=" + participante + ", participante2=" + participante2 + ", eventoDeportivo=" + eventoDeportivo + ", idParticipante=" + idParticipante + ", idParticipante2=" + idParticipante2 + ", codEvento=" + codEvento + ", ganadorApuesta=" + ganadorApuesta + ", perdedorApuesta=" + perdedorApuesta + ", fechaPago=" + fechaPago + ", pagoEstado=" + pagoEstado + ", codEquipo1=" + codEquipo1 + ", codEquipo2=" + codEquipo2 + '}';
     }
 
     
