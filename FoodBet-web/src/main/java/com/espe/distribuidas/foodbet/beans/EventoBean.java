@@ -295,8 +295,7 @@ public class EventoBean implements Serializable {
         System.out.println("antes mail");
         this.enviarMails();
         System.out.println("despues mail");
-        
-        
+
     }
 
     public void enviarMails() {
@@ -306,19 +305,23 @@ public class EventoBean implements Serializable {
             System.out.println("cod1: " + a.getCodEquipo1());
             System.out.println("cod2: " + this.codGanador);
             System.out.println("IdParticipante: " + a.getIdParticipante2());
-            if (a.getCodEquipo1() == this.codGanador && a.getIdParticipante2() != null){
-                System.out.println("correo 1: " +a.getParticipante().getEmail());
+            if (a.getCodEquipo1() == this.codGanador && a.getIdParticipante2() != null) {
+                System.out.println("correo 1: " + a.getParticipante().getEmail());
                 Mail m = new Mail();
                 m.setTo(a.getParticipante().getEmail());
                 m.setSubject("Ganador de la apuesta");
                 m.setMessage("Gracias por participar con nosotros");
                 m.SEND();
 
+                a.setGanadorApuesta(a.getParticipante().getIdParticipante());
                 m = new Mail();
                 m.setTo(a.getParticipante2().getEmail());
                 m.setSubject("Ha perdido la apuesta");
                 m.setMessage("Gracias por participar con nosotros");
                 m.SEND();
+
+                a.setPerdedorApuesta(a.getParticipante2().getIdParticipante());
+                this.apuestaService.actualizarApuesta(a);
             } else {
                 if (a.getCodEquipo2() == this.codGanador) {
                     System.out.println("coreo2: " + a.getParticipante2().getEmail());
@@ -328,11 +331,17 @@ public class EventoBean implements Serializable {
                     m.setMessage("Gracias por participar con nosotros");
                     m.SEND();
 
+                    a.setGanadorApuesta(a.getParticipante2().getIdParticipante());
+
                     m = new Mail();
                     m.setTo(a.getParticipante().getEmail());
                     m.setSubject("Ha perdido la apuesta");
                     m.setMessage("Gracias por participar con nosotros");
                     m.SEND();
+                    a.setPerdedorApuesta(a.getParticipante().getIdParticipante());
+                    
+                    a.setGanadorApuesta(a.getParticipante().getIdParticipante());
+                    this.apuestaService.actualizarApuesta(a);
                 }
             }
         }
