@@ -87,4 +87,12 @@ public class UsuarioServicio {
             return null;
         }
     }
+    
+    public void eliminarUsuario(Usuario u){
+        try{
+            this.usuarioDAO.remove(u);
+        }catch(Exception e){
+            throw new ValidacionException("No se ha podido eliminar el usuario");
+        }
+    }
 }

@@ -5,6 +5,7 @@
  */
 package com.espe.distribuidas.foodbet.converter;
 
+import com.espe.distribuidas.foodbet.clases.Team;
 import com.espe.distribuidas.foodbet.modelo.Equipo;
 import com.espe.distribuidas.foodbet.servicios.EquipoServicio;
 import javax.ejb.EJB;
@@ -21,25 +22,28 @@ import javax.faces.convert.FacesConverter;
  */
 
 @FacesConverter("equipoConverter")
-public class EquipoConverter implements Converter{
+public class EquipoConverter implements Converter {
 
-//    @EJB
-//    private EquipoServicio equipoService;
-    
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        if(value != null){
+        if (value != null) {
             System.out.println("Entra al converter: valor: " + value);
             Integer codEquipo = Integer.parseInt(value);
-//            Equipo team = equipoService.obtenerEquipoPorID(codEquipo);
-//            return team;
+            System.out.println("Entra al converter: valor: " + codEquipo);
+            
+            Team team = new Team();
+            Equipo e = team.obtenerEquipoPorID(codEquipo);
+            System.out.println("equipo: " + e);
+            return e;
         }
         return null;
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        return ((Equipo) value).getCodEquipo().toString();
+        String val = ((Equipo) value).getCodEquipo().toString();
+        System.out.println("getAsString: "+val);
+        return val;
     }
-    
+
 }

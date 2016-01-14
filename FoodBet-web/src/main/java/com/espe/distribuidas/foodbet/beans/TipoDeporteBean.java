@@ -116,7 +116,7 @@ public class TipoDeporteBean implements Serializable{
     }
      
     public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Edición Cancelada", ((Equipo) event.getObject()).getNombre());
+        FacesMessage msg = new FacesMessage("Edición Cancelada", ((TipoDeporte) event.getObject()).getNombre());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 }

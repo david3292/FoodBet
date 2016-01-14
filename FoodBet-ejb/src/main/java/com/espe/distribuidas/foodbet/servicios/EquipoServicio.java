@@ -29,7 +29,16 @@ public class EquipoServicio {
     }
     
     public Equipo obtenerEquipoPorID(Integer codEquipo){
+        System.out.println("entra al metodo");
         return this.equipoDAO.findById(codEquipo, false);
+    }
+    
+    public Equipo obtenerEquipoPorNombre(String nom){
+        Equipo e = new Equipo();
+        e.setNombre(nom);
+        List<Equipo> ee = this.equipoDAO.find(e);
+        e = ee.get(0);
+        return e;
     }
     
     public void insertarEquipo(Equipo e){

@@ -36,6 +36,10 @@ public class RolServicio {
         return this.rolDAO.findAll();
     }
     
+    public Rol obtenerRolPorID(Integer id){
+        return this.rolDAO.findById(id, false);
+    }
+    
     /**
      * Permite ingresar un nuevo rol a la base de datos
      * @param rol es el nuevo rol

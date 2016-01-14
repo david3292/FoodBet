@@ -43,9 +43,16 @@ public class RolBean implements Serializable{
     }
     
     public void nuevo(){
+        this.reset();
         this.rol = new Rol();
         RequestContext context = RequestContext.getCurrentInstance();
         context.update(":form:rolDetail");
+    }
+    
+    public void reset(){
+        this.codRol = null;
+        this.nombreRol = null;
+        this.descRol = null;
     }
     
     public void aceptar(){
@@ -58,11 +65,13 @@ public class RolBean implements Serializable{
         this.init();
     }
     
-    public void eliminar( Rol r){
+    public void eliminar(){
         System.out.println("rolllll : "+ rol.toString());
-        this.addMessageDelete("Eliminado", this.codRol);
+        
         System.out.println("Se elimina el rol" + this.rol);
-        //this.rolService.eliminarRol(rol.getCodRol());
+        this.rolService.eliminarRol(rol.getCodRol());
+        this.roles = this.rolService.obtenerTodosRoles();
+        this.addMessageDelete("Rol eliminado", this.rol.getNombre());
         
     }
 

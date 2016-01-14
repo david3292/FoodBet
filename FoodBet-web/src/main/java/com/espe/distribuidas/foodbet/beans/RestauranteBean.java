@@ -7,6 +7,7 @@ package com.espe.distribuidas.foodbet.beans;
 
 import com.espe.distribuidas.foodbet.modelo.Menu;
 import com.espe.distribuidas.foodbet.modelo.Restaurante;
+import com.espe.distribuidas.foodbet.modelo.Rol;
 import com.espe.distribuidas.foodbet.modelo.Sucursal;
 import com.espe.distribuidas.foodbet.servicios.MenuServicio;
 import com.espe.distribuidas.foodbet.servicios.RestauranteServicio;
@@ -25,6 +26,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 
@@ -46,6 +48,7 @@ public class RestauranteBean extends BaseBean implements Serializable {
     private MenuServicio menuServicio;
 
     private List<Restaurante> restaurantes;
+    private List<Restaurante> restaurantesFiltered;
     private Restaurante restSelected;
     private Restaurante restaurante;
     private String nombre;
@@ -55,6 +58,7 @@ public class RestauranteBean extends BaseBean implements Serializable {
     private String especialidad;
 
     private List<Sucursal> sucursales;
+    private List<Sucursal> sucursalesFiltered;
     private Sucursal sucursalSelected;
     private Sucursal sucursal;
     private boolean enNuevoSucursal;
@@ -64,6 +68,7 @@ public class RestauranteBean extends BaseBean implements Serializable {
     private String tel2Sucursal = "";
 
     private List<Menu> menus;
+    private List<Menu> menusFiltered;
     private Menu menuSelected;
     private Menu menu;
     private boolean enNuevoMenu;
@@ -187,6 +192,46 @@ public class RestauranteBean extends BaseBean implements Serializable {
         } catch (InvocationTargetException ex) {
             Logger.getLogger(RestauranteBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void onRowEditRestaurante(RowEditEvent event) {
+        this.restSelected = ((Restaurante)event.getObject());
+        this.restService.actualizarRestaurante(this.restSelected);
+        FacesMessage msg = new FacesMessage("Restaurante Modificado: ",this.restSelected.getNombre());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        this.restaurantes = this.restService.obtenerTodosRestaurantes();
+    }
+
+    public void onRowCancelRestaurante(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Edición Cancelada", ((Restaurante)event.getObject()).getNombre());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowSucursalSelect(SelectEvent event) {
+        FacesMessage msg = new FacesMessage("Sucursal seleccionada", ((Sucursal) event.getObject()).getDireccion());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        System.out.println("Seleccion Sucursal: " + this.sucursalSelected.toString());
+        init();
+    }
+    
+    public void onRowMenuSelect(SelectEvent event) {
+        FacesMessage msg = new FacesMessage("Menu seleccionado", ((Menu) event.getObject()).getNombre());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        init();
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+        FacesMessage msg = new FacesMessage("Restaurante deseleccionado", ((Restaurante) event.getObject()).getNombre());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void mostrarMensaje(FacesMessage.Severity severityMessage, String mensaje) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(severityMessage, "Mensaje:", mensaje));
+    }
+    
+    public void restauranteSelect(){
+        this.sucursales = this.restSelected.getSucursales();
     }
 
     @Override
@@ -488,33 +533,28 @@ public class RestauranteBean extends BaseBean implements Serializable {
         this.menuDescripcion = menuDescripcion;
     }
 
-    public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage("Restaurante seleccionado", ((Restaurante) event.getObject()).getNombre());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        System.out.println(this.restSelected.toString());
-        init();
+    public List<Restaurante> getRestaurantesFiltered() {
+        return restaurantesFiltered;
     }
 
-    public void onRowSucursalSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage("Sucursal seleccionada", ((Sucursal) event.getObject()).getDireccion());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        System.out.println("Seleccion Sucursal: " + this.sucursalSelected.toString());
-        init();
+    public void setRestaurantesFiltered(List<Restaurante> restaurantesFiltered) {
+        this.restaurantesFiltered = restaurantesFiltered;
+    }
+
+    public List<Sucursal> getSucursalesFiltered() {
+        return sucursalesFiltered;
+    }
+
+    public void setSucursalesFiltered(List<Sucursal> sucursalesFiltered) {
+        this.sucursalesFiltered = sucursalesFiltered;
+    }
+
+    public List<Menu> getMenusFiltered() {
+        return menusFiltered;
+    }
+
+    public void setMenusFiltered(List<Menu> menusFiltered) {
+        this.menusFiltered = menusFiltered;
     }
     
-    public void onRowMenuSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage("Menu seleccionado", ((Menu) event.getObject()).getNombre());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        init();
-    }
-
-    public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage("Restaurante deseleccionado", ((Restaurante) event.getObject()).getNombre());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-    public void mostrarMensaje(FacesMessage.Severity severityMessage, String mensaje) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(severityMessage, "Mensaje:", mensaje));
-    }
 }
