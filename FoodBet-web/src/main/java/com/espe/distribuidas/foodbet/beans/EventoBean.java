@@ -292,13 +292,20 @@ public class EventoBean implements Serializable {
             }
         }
         this.eventos = this.eventService.obtenerEventDeportivos();
+        System.out.println("antes mail");
+        this.enviarMails();
+        System.out.println("despues mail");
     }
 
     public void enviarMails() {
         List<Apuesta> apuestas = this.apuestaService.obtenerApuestasPorEvento(this.evento.getCodEvento());
-
+        System.out.println("Apuestas para el mail: " + apuestas);
         for (Apuesta a : apuestas) {
+            System.out.println("cod1: " + a.getCodEquipo1());
+            System.out.println("cod2: " + this.codGanador);
+            System.out.println("IdParticipante: " + a.getIdParticipante2());
             if (a.getCodEquipo1() == this.codGanador && a.getIdParticipante2() != null){
+                System.out.println("correo 1: " +a.getParticipante().getEmail());
                 Mail m = new Mail();
                 m.setTo(a.getParticipante().getEmail());
                 m.setSubject("Ganador de la apuesta");
@@ -312,16 +319,17 @@ public class EventoBean implements Serializable {
                 m.SEND();
             } else {
                 if (a.getCodEquipo2() == this.codGanador) {
+                    System.out.println("coreo2: " + a.getParticipante2().getEmail());
                     Mail m = new Mail();
                     m.setTo(a.getParticipante2().getEmail());
                     m.setSubject("Ganador de la apuesta");
-                    m.setSubject("Gracias por participar con nosotros");
+                    m.setMessage("Gracias por participar con nosotros");
                     m.SEND();
 
                     m = new Mail();
                     m.setTo(a.getParticipante().getEmail());
                     m.setSubject("Ha perdido la apuesta");
-                    m.setSubject("Gracias por participar con nosotros");
+                    m.setMessage("Gracias por participar con nosotros");
                     m.SEND();
                 }
             }

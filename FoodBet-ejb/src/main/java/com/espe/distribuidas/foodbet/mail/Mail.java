@@ -44,7 +44,7 @@ public class Mail
       props.put("mail.smtp.user", this.from);
       props.put("mail.smtp.port", "587");
       
-      Session session = Session.getDefaultInstance(props, new SMTPAutenticar());
+      Session session = Session.getDefaultInstance(props, new SMTPAutenticar(getFrom(),getPassword()));
       session.setDebug(false);
       
       MimeMessage mimemessage = new MimeMessage(session);
